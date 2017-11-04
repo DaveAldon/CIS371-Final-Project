@@ -8,3 +8,8 @@ Parse Response
 
 const apiID = "jUv7Kj68ZHWx89jz_XYl4A";
 const apiKey = "FmnbNwpbWB0qea1BtvUWV0NUDYR6KEPsDifSDMJ3dBdjra1xeBvssPJLB0I6oKmg";
+
+const apiRoot = "https://api.yelp.com";
+const apiAuth = "/oauth2/token";
+const grantType = "client_credentials";
+const Searchapi = '/v3/businesses/search';
