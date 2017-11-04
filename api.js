@@ -14,36 +14,30 @@ const apiToken = "/oauth2/token";
 const grantType = "client_credentials";
 const Searchapi = '/v3/businesses/search?';
 
-zip = '49504';
+var zip = '49504';
 
-function getFoodwithZip(zip){
-    $.ajax(`${apiRoot}${apiToken}`, {
-        type: "POST",
+function getFoodwithZip(){
+    
+    $.ajax({
+        url: `${apiRoot}${apiToken}`,
+         method: "POST",             
         crossDomain: true,
+        async: true,        
          data: {
             grant_type: grantType,
             client_id: apiID,
             client_secret: apiKey
-        },
-        beforeSend: function(xhr) {
-            xhr.setRequestHeader("Authorization", "Bearer $token")
+        },           
+        contentType: "application/x-www-form-urlencoded",
+        dataType: "jsonp",
+        success: function (data) {                  
+            console.log(data);
+              },
+        error: function () {
+            console.log("failed");
+        }
+    });
 
-        },
-        complete: function(response){ console.log(response);}
-        });
-		
-//         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',      
-//           dataType: "json",
-//         success: function (data) {
-//             console.log(data);
-    
-//         },
-//         error: function () {
-//             console.log("post call error");
-//         }
-    
-    
-//     })
 }
 
-getFoodwithZip(zip);
+getFoodwithZip();
