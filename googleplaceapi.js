@@ -35,7 +35,7 @@ function initAutocomplete() {
   searchBox.addListener('places_changed', function () {
      $("#list").empty();  
      $('#table > tr').remove();
-     $('#table').append("<tr><th>Name</th><th>Rating</th><th>URL</th></tr>");
+     $('#table').append("<tr><th>Name</th><th>Rating</th><th>URL</th><th>OpenNow</th><th>ID</th></tr>");
      
      //Testing
     var places = searchBox.getPlaces();
@@ -67,11 +67,11 @@ function initAutocomplete() {
                     //$('#list').append(results[i].name +  '<br />');
                     service.getDetails(detailRequest, callback);
                     function callback(place, status) {
-                                             //console.log(place);
+                                             console.log(place);
 
                       if (status == google.maps.places.PlacesServiceStatus.OK) {
-                          console.log("<tr><td>"+place.name+"</td><td>"+place.rating+"</td><td>"+place.website+"</td></tr>");                      
-                        $('#table').append("<tr><td>"+place.name+"</td><td>"+place.rating+"</td><td>"+place.url+"</td></tr>");
+                                             
+              $('#table').append("<tr><td>"+place.name+"</td><td>"+place.rating+"</td><td>"+place.url+"</td><td>"+place.opening_hours.open_now+"</td><td>"+place.id+"</td></tr>");
                         // $('#list').append(place.name + place.rating + place.url + '<br />');
                         //console.log(place);
 
