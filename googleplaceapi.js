@@ -33,7 +33,11 @@ function initAutocomplete() {
   // Listen for the event fired when the user selects a prediction and retrieve
   // more details for that place.
   searchBox.addListener('places_changed', function () {
-     $("#list").empty();          //Testing
+     $("#list").empty();  
+     $('#table > tr').remove();
+     $('#table').append("<tr><th>Name</th><th>Rating</th><th>URL</th></tr>");
+     
+     //Testing
     var places = searchBox.getPlaces();
     console.log(places[0].name);
     if (places.length > 0) {
@@ -43,8 +47,8 @@ function initAutocomplete() {
           //console.log(status);
           if (status === 'OK') {
             results.forEach(function (result) {
-              console.log(result.geometry.location.lng());
-              console.log(result.geometry.location.lat());
+              console.log(result.geometry.location.lat() + result.geometry.location.lng());
+            
                request = {
                 location: new google.maps.LatLng(result.geometry.location.lat(), result.geometry.location.lng()),
                 radius: '500',
@@ -55,18 +59,27 @@ function initAutocomplete() {
                  console.log(results.length);
                 if (status == google.maps.places.PlacesServiceStatus.OK) {
                   for (var i = 0; i < results.length; i++) {
-                    console.log(results[i]);
+                    
                      detailRequest = {
                       placeId: results[i].place_id
                     };
-                    $('#list').append(results[i].name +  '<br />');
-                    //service.getDetails(detailRequest, callback);
-                    // function callback(place, status) {
-                    //   if (status == google.maps.places.PlacesServiceStatus.OK) {
-                    //     console.log(place);
-                    //     }
+                    
+                    //$('#list').append(results[i].name +  '<br />');
+                    service.getDetails(detailRequest, callback);
+                    function callback(place, status) {
+                                             //console.log(place);
+
+                      if (status == google.maps.places.PlacesServiceStatus.OK) {
+                          console.log("<tr><td>"+place.name+"</td><td>"+place.rating+"</td><td>"+place.website+"</td></tr>");                      
+                        $('#table').append("<tr><td>"+place.name+"</td><td>"+place.rating+"</td><td>"+place.url+"</td></tr>");
+                        // $('#list').append(place.name + place.rating + place.url + '<br />');
+                        //console.log(place);
+
+                        //Data for all restaurants within input zip is ready //Ready for another level of complexity
+
+                        }
                        
-                    // }
+                    }
                    
                   }
                 }
