@@ -12,12 +12,16 @@ var geocoder;
 var request;
 var detailRequest;
 var delay = 0;
-var paginate = 0;
+var searchReturn = [];
 //let map = new google.maps.Map(document.createElement('div'));
+var count = 1;
+window.onload=$('#more').hide();
+
 
 function initAutocomplete() {
   service = new google.maps.places.PlacesService(document.createElement('div'));
-  geocoder = new google.maps.Geocoder;
+  
+  //geocoder = new google.maps.Geocoder;
   //console.log(map);
 
   // Create the search box and link it to the UI element.
@@ -39,18 +43,17 @@ function initAutocomplete() {
 
     //Testing
     var places = searchBox.getPlaces();
-    console.log(places[0]);
+    //console.log(places[0]);
     if (places.length > 0) {
       places.forEach(function (place) {
-
-        geocoder.geocode({ 'address': place.name }, function (results, status) {
-          //console.log(status);
-          if (status === 'OK') {
-            results.forEach(function (result) {
-              console.log(result.geometry.location.lat() + "/" + result.geometry.location.lng());
+          //console.log(place != undefined);
+      
+          //console.log(status);          
+            
+              console.log(place.geometry.location.lat() + "/" + place.geometry.location.lng());
 
               request = {
-                location: new google.maps.LatLng(result.geometry.location.lat(), result.geometry.location.lng()),
+                location: new google.maps.LatLng(place.geometry.location.lat(), place.geometry.location.lng()),
                 radius: '500',
                 query: 'restaurant',
                 minPriceLevel: 0,
@@ -58,39 +61,48 @@ function initAutocomplete() {
               };
 
               service.textSearch(request, searchPlaces);
-              function searchPlaces(results, status) {     //to get up to 60 places
-                      if (status == google.maps.places.PlacesServiceStatus.OK) {
-                        processResults(results);
-                      }
+              function searchPlaces(results, status, pagination) {     //to get up to 60 places
+                      // if (status == google.maps.places.PlacesServiceStatus.OK) {
+                      //   processResults(results);
+                      // }
 
                 //console.log(results);
-                // if (status !== google.maps.places.PlacesServiceStatus.OK) {
-                //   return;
-                // } else {
-                //   restaurants.push.apply(restaurants, results);
-                //   if (pagination.hasNextPage) {
-                //     pagination.nextPage();
+                if (status !== google.maps.places.PlacesServiceStatus.OK) {
+                  return;
+                } else {
+                 // searchReturn.push.apply(searchReturn, results);
+                  processResults(results);
+                  
+                  console.log(results.length);               
+                  if (pagination.hasNextPage) {
+                    $('#more').show();
 
-                //     console.log(results.length);
+                    $('#more').click(()=>{
+                      $('#more').hide();
+                      
+                      pagination.nextPage();
+                      
 
+                    });
 
-                //   }
-                //   else {
-                //     processResults(restaurants);
+                  }
+                  else {
+                    $('#more').hide();
+                    //processResults(searchReturn);
 
-                //   }
-                //   //pagination scope
-                // }  //else of search places scope
+                  }
+                  //pagination scope
+                }  //else of search places scope
                 // paginate++;
                 // $('#list').append(`<h4> Total delay ${delay} for ${paginate} Pagination</h4>`);
                 // console.log(`Total delay ${delay}`);
 
               }  //searchPLaces  scope
-            });
+          
 
-          }
+          
 
-        });
+         //geodecoder
 
 
       });
@@ -102,7 +114,7 @@ function initAutocomplete() {
 }
 
 function processResults(restaurants) {
-  var count = 1;
+  
   
   $('#list').append(`<h4> Nearest ${restaurants.length} around given address </h4>`);
 
@@ -111,7 +123,14 @@ function processResults(restaurants) {
       placeId: restaurants[i].place_id
     }, callback);
     function callback(place, status) {
-      if (status == google.maps.places.PlacesServiceStatus.OK) {
+      if (status == google.maps.places.PlacesServiceStatus.OVER_QUERY_LIMIT) {
+         setTimeout(2000);
+         i--;
+        console.log(status +" "+ i);
+           //redo the index which hits the limit , 1000 milisecond = 1 sec
+
+      }
+      else if(status == google.maps.places.PlacesServiceStatus.OK) {
         try {
           // console.log(place)
 
@@ -123,20 +142,14 @@ function processResults(restaurants) {
           $('#table').append("<tr><td>" + count++ + "</td><td>" + place.name + "</td><td>" + place.rating + "</td><td>" + place.price_level + "</td><td>" + place.url + "</td><td>Call " + place.international_phone_number + "</td><td>" + place.place_id + "</td></tr>");
 
           //console.log(place);
-          //console.log(e);
         }
         // $('#list').append(place.name + place.rating + place.url + '<br />');
         //console.log(place);
 
         //Data for all restaurants within input zip is ready //Ready for another level of complexity
-
+        console.log("Got it " + i);
       }
-      else if (status == google.maps.places.PlacesServiceStatus.OVER_QUERY_LIMIT) {
-        setTimeout(1000);
-        i--;   //redo the index which hits the limit , 1000 milisecond = 1 sec
-
-
-      }
+    
     }
   }
 }

@@ -33,7 +33,46 @@
       border-color: #4d90fe;
     }
 
-   
+    
+  
+
+button {
+  margin:auto;
+  display:block;
+    position: relative;
+    background-color: #4CAF50;
+    border: none;
+    font-size: 28px;
+    color: #FFFFFF;
+    padding: 20px;
+    width: 200px;
+    text-align: center;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    text-decoration: none;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+button:after {
+    content: "";
+    background: #90EE90;
+    display: block;
+    position: absolute;
+    padding-top: 300%;
+    padding-left: 350%;
+    margin-left: -20px!important;
+    margin-top: -120%;
+    opacity: 0;
+    transition: all 0.8s
+}
+
+button:active:after {
+    padding: 0;
+    margin: 0;
+    opacity: 1;
+    transition: 0s
+}
   </style>
 <html>
     <body>
@@ -42,11 +81,11 @@
         </div>
         <br/>
         <table id='table' border="1" align='center'></table>            
-        
+        <button id='more'>More</button>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSe4LR0eJJVUa49pvLet_0fELbPScELfQ&libraries=places&callback=initAutocomplete"
         async defer></script>      
-  
+        <script src="jquery.ajaxQueue.js"></script>
     <script src="googleplaceapi.js"></script>   
  </body></html>
