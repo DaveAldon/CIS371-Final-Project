@@ -38,7 +38,7 @@ function initAutocomplete() {
   searchBox.addListener('places_changed', function () {
     $("#list").empty();
     $('#table > tr').remove();
-    $('#table').append("<tr><th>Count</th><th>Name</th><th>Rating</th><th>PriceLevel</th><th>URL</th><th>OpenNow</th><th>ID</th></tr>");
+    $('#table').append("<tr><th>Count</th><th>Name</th><th>Rating</th><th>PriceLevel</th><th>Type</th><th>OpenNow</th><th>ID</th></tr>");
     // $('#table').append("<tr><th>Name</th><th>Rating</th><th>Types</th><th>ID</th></tr>");
 
     //Testing
@@ -73,7 +73,7 @@ function initAutocomplete() {
                  // searchReturn.push.apply(searchReturn, results);
                   processResults(results);
                   
-                  console.log(results.length);               
+                  console.log(results);               
                   if (pagination.hasNextPage) {
                     $('#more').show();
 
@@ -119,27 +119,28 @@ function processResults(restaurants) {
   $('#list').append(`<h4> Nearest ${restaurants.length} around given address </h4>`);
 
   for (var i = 0; i < restaurants.length; i++) {
-    service.getDetails({
-      placeId: restaurants[i].place_id
-    }, callback);
-    function callback(place, status) {
-      if (status == google.maps.places.PlacesServiceStatus.OVER_QUERY_LIMIT) {
-         setTimeout(2000);
-         i--;
-        console.log(status +" "+ i);
-           //redo the index which hits the limit , 1000 milisecond = 1 sec
+    // service.getDetails({
+    //   placeId: restaurants[i].place_id
+    // }, callback);
+    // function callback(place, status) {
+    //   if (status == google.maps.places.PlacesServiceStatus.OVER_QUERY_LIMIT) {
+    //      setTimeout(1000);
+    //      i--;
+    //     console.log(status +" "+ i);
+    //        //redo the index which hits the limit , 1000 milisecond = 1 sec
 
-      }
-      else if(status == google.maps.places.PlacesServiceStatus.OK) {
+    //   }
+    //   else if(status == google.maps.places.PlacesServiceStatus.OK) {
+      place = restaurants[i];
         try {
           // console.log(place)
 
-          $('#table').append("<tr><td>" + count++ + "</td><td>" + place.name + "</td><td>" + place.rating + "</td><td>" + place.price_level + "</td><td>" + place.url + "</td><td>" + place.opening_hours.open_now + "</td><td>" + place.place_id + "</td></tr>");
+          $('#table').append("<tr><td>" + count++ + "</td><td>" + place.name + "</td><td>" + place.rating + "</td><td>" + place.price_level + "</td><td>" + place.types + "</td><td>" + place.opening_hours.open_now + "</td><td>" + place.place_id + "</td></tr>");
         }
         catch (e) {
 
           console.log("Stupid Happened with obj(s) below")
-          $('#table').append("<tr><td>" + count++ + "</td><td>" + place.name + "</td><td>" + place.rating + "</td><td>" + place.price_level + "</td><td>" + place.url + "</td><td>Call " + place.international_phone_number + "</td><td>" + place.place_id + "</td></tr>");
+          $('#table').append("<tr><td>" + count++ + "</td><td>" + place.name + "</td><td>" + place.rating + "</td><td>" + place.price_level + "</td><td>" + place.types + "</td><td>Call " + place.international_phone_number + "</td><td>" + place.place_id + "</td></tr>");
 
           //console.log(place);
         }
@@ -147,10 +148,10 @@ function processResults(restaurants) {
         //console.log(place);
 
         //Data for all restaurants within input zip is ready //Ready for another level of complexity
-        console.log("Got it " + i);
-      }
+  //       console.log("Got it " + i);
+  //     }
     
-    }
+  //   }
   }
 }
 
