@@ -1,0 +1,44 @@
+{
+  "name": "paper-input-place",
+  "description": "Google Places Autocomplete attached to paper-input",
+  "main": "paper-input-place.html",
+  "demo": "demo/index.html",
+  "keywords": [
+    "polymer",
+    "place",
+    "places",
+    "autocomplete",
+    "google-places",
+    "web-components",
+    "geocode",
+    "reverse-geocode"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "polymer": "Polymer/polymer#1.9 - 2",
+    "paper-input": "PolymerElements/paper-input#^2.0.0",
+    "iron-input": "PolymerElements/iron-input#^2.0.0",
+    "iron-jsonp-library": "PolymerElements/iron-jsonp-library#^2.0.0",
+    "iron-icon": "PolymerElements/iron-icon#^2.0.0",
+    "iron-iconset-svg": "PolymerElements/iron-iconset-svg#^2.0.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^2.0.0",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
+    "web-component-tester": "^6.0.0",
+    "highlightjs": "^9.5.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
+  },
+  "version": "1.9.5",
+  "homepage": "https://github.com/mlisook/paper-input-place",
+  "_release": "1.9.5",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.9.5",
+    "commit": "d5252207b78c91473a0c13ca50ba7e082cfe53a0"
+  },
+  "_source": "https://github.com/mlisook/paper-input-place.git",
+  "_target": "^1.9.5",
+  "_originalSource": "mlisook/paper-input-place",
+  "_direct": true
+}

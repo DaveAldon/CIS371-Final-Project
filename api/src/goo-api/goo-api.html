@@ -1,0 +1,169 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-bind.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-repeat.html">
+
+<link rel="import" href="../../bower_components/google-map/google-map.html">
+<link rel="import" href="../../bower_components/google-map/google-map-search.html">
+<link rel="import" href="../../bower_components/google-map/google-map-marker.html">
+<link rel="import" href="../../bower_components/google-apis/google-maps-api.html">
+
+<link rel="import" href="../../bower_components/paper-input-place/paper-input-place.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input-container.html">
+
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+
+
+<dom-module id="goo-api">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      google-map {
+    height: 300px;
+  }
+  paper-input-place {
+    width: 450px;
+  }
+  paper-input-place.custom {        
+    --paper-input-container-underline: {
+      border-bottom: 2px dotted blue;
+    }
+    --paper-input-container-underline-focus: {
+      border-bottom: 4px solid blue;
+    }
+    --paper-input-container-label-focus: {
+      font-style: italic;
+      color: green;
+      font-weight: bold;
+    }
+    --paper-input-container-label: {
+      font-style: italic;
+      color: grey;
+      font-weight: normal;
+    }
+      --paper-input-container-label-floating: {
+      font-style: italic;
+      color: darkgreen;
+      font-weight: bold;
+    }
+  }
+    /* and a custom property also */
+      paper-input-place {
+        --paper-input-place-icon-mixin: {
+          color: green;
+    };
+    --paper-input-place-prefix-icon-mixin: {
+          margin-right: 1em;
+        };
+        --paper-input-place-postfix-icon-mixin: {
+          margin-left: 1em;
+        };
+  }
+  
+    </style>
+<paper-input-place id='input' api-key="AIzaSyA1jZJXlG8oo8BU-jye32H61p68GcjUNyQ" class="custom" value="{{val}}" place="{{place}}" 
+label="Pick a place, any place" on-place-changed="changed"  hide-error></paper-input-place>
+<span  id='validate' hidden$="[[inv]]" style="color:green;"> Entry is valid </span>
+
+<iron-list items="[[list]]" as="restaurant" >
+  <template>
+     <h4>"[[restaurant.name]]"</h4> 
+      </template>
+  </iron-list>
+    
+<!-- <google-map latitude="37.77493" longitude="-122.41942" fit-to-markers apiKey="AIzaSyA1jZJXlG8oo8BU-jye32H61p68GcjUNyQ">
+    <google-map-marker latitude="37.779" longitude="-122.3892"
+        draggable="true" title="Go Giants!"></google-map-marker>
+    <google-map-marker latitude="37.777" longitude="-122.38911"></google-map-marker>
+  </google-map> -->
+
+    <h2>Hello [[list]]!</h2>
+  </template>
+
+  <script>
+
+    /**
+     * @customElement
+     * @polymer
+     */
+    class GooApi extends Polymer.Element {
+      static get is() { return 'goo-api'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'goo-api'
+          },
+          inv: {
+            type: Boolean,
+            value: true
+          }
+          ,
+          place:{
+          type: Object
+        },
+          list: {
+            type: Array,
+            value: [],
+             computed: '_searchplaces(place,\'restaurant\')'
+                        },
+      
+          
+        };
+      }
+
+     changed(e){ 
+      this.inv = true;
+      //console.log(e.target.place.place_id);
+     if(typeof e.target.place.place_id !== "undefined"){
+       // if (e.target.value.place_id.length > 0){
+               this.inv = false;
+        //console.log(e.target.searchPlaces(e.target.place,'restaurant'));
+        var p = e.target.searchPlaces(e.target.place,'restaurant');
+        p.then((response)=>{
+          // response.forEach((detail)=>{
+          //     console.log(detail);
+          // });
+
+       });
+        // console.log(e.target.reverseGeocode(e.target.value.latLng));
+      }
+
+      
+      }
+       
+
+      _searchplaces(place, query){
+         //console.log(place.place_id);
+        //  var arr=[];
+        if(typeof place.place_id !== "undefined"){
+        //console.log(this.$.input.reverseGeocode(place.latLng));
+        var p = this.$.input.searchPlaces(place,query);
+
+        p.then(function(response){
+          console.log(response);
+          return response;
+        // arr.push.apply(arr, response);
+        });
+      //  return arr;
+        }
+        console.log(this.list);
+        //this.$.input.placeSearch('restaurant');
+        }
+      
+
+ 
+
+    }
+
+    window.customElements.define(GooApi.is, GooApi);
+  </script>
+</dom-module>
