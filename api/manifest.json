@@ -1,7 +1,0 @@
-{
-  "name": "goo-api",
-  "short_name": "goo-api",
-  "description": "Dependecy to google-map component",
-  "start_url": "/",
-  "display": "standalone"
-}

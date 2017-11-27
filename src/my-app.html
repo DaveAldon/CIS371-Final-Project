@@ -26,9 +26,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-<link rel="lazy-import" href="my-view1.html">
-<link rel="lazy-import" href="my-view2.html">
-<link rel="lazy-import" href="my-view3.html">
+<link rel="lazy-import" href="my-home.html">
+<link rel="lazy-import" href="my-search.html">
+<link rel="lazy-import" href="my-feed.html">
 <link rel="lazy-import" href="my-login.html">
 <link rel="lazy-import" href="my-view404.html">
 
@@ -103,9 +103,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <app-header reveals>
         <app-toolbar>
           <iron-selector selected="[[page]]" attr-for-selected="name" class="menu-bar" role="navigation">
-            <a name="view1" href="[[rootPath]]view1">Cheap Eats</a>
-            <a name="view2" href="[[rootPath]]view2">Search</a>
-            <a name="view3" href="[[rootPath]]view3">Feed</a>
+            <a name="home" href="[[rootPath]]home">Cheap Eats</a>
+            <a name="search" href="[[rootPath]]search">Search</a>
+            <a name="feed" href="[[rootPath]]feed">Feed</a>
             <a name="login" href="[[rootPath]]login">Login</a>
           </iron-selector>
           <paper-progress value="10" indeterminate bottom-item></paper-progress>
@@ -122,9 +122,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             attr-for-selected="name"
             fallback-selection="view1"
             role="main">
-          <my-view1 name="view1"></my-view1>
-          <my-view2 name="view2"></my-view2>
-          <my-view3 name="view3"></my-view3>
+          <my-home name="home"></my-home>
+          <my-search name="search"></my-search>
+          <my-feed name="feed"></my-feed>
           <my-login name="login"></my-login>
           <my-view404 name="view404"></my-view404>
         </iron-pages>
