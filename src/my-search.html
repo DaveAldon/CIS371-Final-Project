@@ -96,8 +96,13 @@
 label="Pick a place, any place" on-value-changed="wipeout" on-place-changed="changed"  nearbyrestaurants={{res}} hide-error></paper-input-place>
 <span  id='validate' hidden$="[[inv]]" style="color:green;"> Entry is valid
     <paper-button id='pagibutton' raised >More</paper-button> <div style="display:inline-block;">
+<<<<<<< Updated upstream:src/my-search.html
     <h3>Total [[res.length]] places found </h3> <h4 style="color:red;">Notice! the order of below list is for ascending distance from the location you just picked</h4></div>
   </span>
+=======
+    <h3>Nearest [[res.length]] places</h3> <h4 style="color:red;">Notice! the order of below list is for ascending distance from the location you just picked</h4></div> 
+  </span> 
+>>>>>>> Stashed changes:api/src/goo-api/goo-api.html
 
 <iron-list id="ironl" items="[[res]]" as="restaurant" >
   <template>
@@ -108,6 +113,8 @@ label="Pick a place, any place" on-value-changed="wipeout" on-place-changed="cha
 
                   <div><b>Rating</b>: [[restaurant.rating]]</div>
                   <div><b>PriceLevel</b>: [[restaurant.price_level]]</div>
+                  <div><b>Open Now</b>: [[restaurant.opening_hours.open_now ]]</div>
+               
                   <div><b>PlaceID</b>: [[restaurant.place_id]]</div>
 
                   </div>
