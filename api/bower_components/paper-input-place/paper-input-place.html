@@ -294,8 +294,9 @@ See README.MD for more use examples, styling, api and a link to a live demo page
           notify: true,
           observer: '_valueChanged'
         },
-        nearby:{
+        nearbyrestaurants: {
           type: Array,
+          notify: true,
           value: []
         },
         /** @private */
@@ -480,6 +481,7 @@ See README.MD for more use examples, styling, api and a link to a live demo page
 
       _clearLocation: function (e) {
         this._value = "";
+        this.nearbyrestaurants = [];
       },
       /**
        * Geocodes an address
@@ -537,7 +539,7 @@ See README.MD for more use examples, styling, api and a link to a live demo page
        * @param  {String} query Optional - Geocoder Request options
        * @return {Promise<Array>}         A promise for a place object or a status on failure
        */
-      searchPlaces: function (place, query) {
+      searchPlaces: function (place, query, pagibutton) {
         return new Promise(function (resolve, reject) {
           if (!this._placesearch) {
             reject('Search library not ready.');
@@ -550,9 +552,23 @@ See README.MD for more use examples, styling, api and a link to a live demo page
               opts.minPriceLevel = 0;
               opts.maxPriceLevel = 4;
             }
-            this._placesearch.textSearch(opts, function (results, status) {
+            this._placesearch.textSearch(opts, function (results, status, pagination) {
               if (status == google.maps.places.PlacesServiceStatus.OK) {
                                     resolve(results);
+                                   results.forEach((element)=>{
+                                        this.push('nearbyrestaurants', element);
+                                   })                                   
+                                    if (pagination.hasNextPage) {
+                                        pagibutton.onclick = ()=>{
+                                          //this.more = results;
+                                          //console.log(results);
+                                          pagination.nextPage();
+
+                                        }
+                                    }
+                                    else{
+
+                                    }
               } else {
                 reject(status);
               }

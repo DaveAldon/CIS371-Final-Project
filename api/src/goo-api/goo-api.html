@@ -19,6 +19,7 @@
 <link rel="import" href="../../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../../bower_components/iron-list/iron-list.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
 
 
 <dom-module id="goo-api">
@@ -83,12 +84,22 @@
         border-radius: 8px;
       }
 
+
+      paper-button {
+        --paper-button-ink-color: blue;
+        background-color: var(--paper-indigo-500);
+        color: white;
+      }
+
     </style>
 <paper-input-place id='input' api-key="AIzaSyA1jZJXlG8oo8BU-jye32H61p68GcjUNyQ" class="custom" value="{{val}}" place="{{place}}" 
-label="Pick a place, any place" on-place-changed="changed"  hide-error></paper-input-place>
-<span  id='validate' hidden$="[[inv]]" style="color:green;"> Entry is valid </span>
+label="Pick a place, any place" on-value-changed="wipeout" on-place-changed="changed"  nearbyrestaurants={{res}} hide-error></paper-input-place>
+<span  id='validate' hidden$="[[inv]]" style="color:green;"> Entry is valid
+    <paper-button id='pagibutton' raised >More</paper-button> <div style="display:inline-block;">
+    <h3>Total [[res.length]] places found </h3> <h4 style="color:red;">Notice! the order of below list is for ascending distance from the location you just picked</h4></div> 
+  </span> 
 
-<iron-list items="[[list]]" as="restaurant" >
+<iron-list id="ironl" items="[[res]]" as="restaurant" >
   <template>
       <div class='item layout horizontal justified'>          
           <paper-card heading="[[restaurant.name]]" elevation="2"> 
@@ -113,7 +124,7 @@ label="Pick a place, any place" on-place-changed="changed"  hide-error></paper-i
     <google-map-marker latitude="37.777" longitude="-122.38911"></google-map-marker>
   </google-map> -->
 
-    <!-- <h2>Hello [[list]]!</h2> -->
+   
   </template>
 
   <script>
@@ -134,11 +145,18 @@ label="Pick a place, any place" on-place-changed="changed"  hide-error></paper-i
             type: Boolean,
             value: true
           },
+          place:{
+            type: Object
+          },
           
           list: {
             type: Array,
             value: []
                         },
+        res: {
+          type: Array,
+          notify: true
+        }
       
           
         };
@@ -151,20 +169,24 @@ label="Pick a place, any place" on-place-changed="changed"  hide-error></paper-i
        // if (e.target.value.place_id.length > 0){
                this.inv = false;
         //console.log(e.target.searchPlaces(e.target.place,'restaurant'));
-        var p = e.target.searchPlaces(e.target.place,'restaurant');  //restaurant is queryKey
-        p.then(response => this.list = response);
+        //console.log(e.target.place);
+        e.target.searchPlaces(e.target.place,'restaurant', this.$.pagibutton);  //restaurant is queryKey
+        //p.then(response => this.list = response);
           // response.forEach((detail)=>{
-          p.then(response => {
-          console.log(response);});
-          // });
+          // p.then(response => {
+          // console.log(response);});
+          // });   
+          }
 
-      
-        // console.log(e.target.reverseGeocode(e.target.value.latLng));
       }
 
-      
-      }
+    wipeout(){
+      this.res = [];
+      //this.$.ironl.items = [];
+    }
   
+
+
       
       /**
 
