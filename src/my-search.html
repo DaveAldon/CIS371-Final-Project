@@ -24,117 +24,99 @@
 
 <dom-module id="my-search">
   <template>
-      <style include="iron-flex iron-flex-alignment"></style>
+    <style include="iron-flex iron-flex-alignment"></style>
     <style >
       :host {
         display: block;
       }
       google-map {
-    height: 300px;
-  }
-  paper-input-place {
-    width: 450px;
-  }
-  paper-input-place.custom {
-    --paper-input-container-underline: {
-      border-bottom: 2px dotted blue;
-    }
-    --paper-input-container-underline-focus: {
-      border-bottom: 4px solid blue;
-    }
-    --paper-input-container-label-focus: {
-      font-style: italic;
-      color: green;
-      font-weight: bold;
-    }
-    --paper-input-container-label: {
-      font-style: italic;
-      color: grey;
-      font-weight: normal;
-    }
-      --paper-input-container-label-floating: {
-      font-style: italic;
-      color: darkgreen;
-      font-weight: bold;
-    }
-  }
-    /* and a custom property also */
+        height: 300px;
+      }
+      paper-input-place {
+        width: 450px;
+      }
+      paper-input-place.custom {
+        --paper-input-container-underline: {
+          border-bottom: 2px dotted blue;
+        }
+        --paper-input-container-underline-focus: {
+          border-bottom: 4px solid blue;
+        }
+        --paper-input-container-label-focus: {
+          font-style: italic;
+          color: green;
+          font-weight: bold;
+        }
+        --paper-input-container-label: {
+          font-style: italic;
+          color: grey;
+          font-weight: normal;
+        }
+        --paper-input-container-label-floating: {
+          font-style: italic;
+          color: darkgreen;
+          font-weight: bold;
+        }
+      }
+        /* and a custom property also */
       paper-input-place {
         --paper-input-place-icon-mixin: {
           color: green;
-    };
-    --paper-input-place-prefix-icon-mixin: {
+        };
+        --paper-input-place-prefix-icon-mixin: {
           margin-right: 1em;
         };
         --paper-input-place-postfix-icon-mixin: {
           margin-left: 1em;
         };
-  }
-
-  iron-list {
+      }
+      iron-list {
         height: 80vh;
         width: 80vw;
         display:block;
         margin: auto;
       }
-
-  paper-card {
+      paper-card {
         width: 100%;
         background: lightgoldenrodyellow;
         border-radius: 8px;
       }
-
-
       paper-button {
         --paper-button-ink-color: blue;
         background-color: var(--paper-indigo-500);
         color: white;
       }
-
     </style>
-<paper-input-place id='input' api-key="AIzaSyA1jZJXlG8oo8BU-jye32H61p68GcjUNyQ" class="custom" value="{{val}}" place="{{place}}"
-label="Pick a place, any place" on-value-changed="wipeout" on-place-changed="changed"  nearbyrestaurants={{res}} hide-error></paper-input-place>
-<span  id='validate' hidden$="[[inv]]" style="color:green;"> Entry is valid
-    <paper-button id='pagibutton' raised >More</paper-button> <div style="display:inline-block;">
-    <h3>Nearest [[res.length]] places</h3> <h4 style="color:red;">Notice! the order of below list is for ascending distance from the location you just picked</h4></div> 
-  </span> 
+    <paper-input-place id='input' api-key="AIzaSyA1jZJXlG8oo8BU-jye32H61p68GcjUNyQ" class="custom" value="{{val}}" place="{{place}}"
+    label="Pick a place, any place" on-value-changed="wipeout" on-place-changed="changed"  nearbyrestaurants={{res}} hide-error></paper-input-place>
+    <span  id='validate' hidden$="[[inv]]" style="color:green;"> Entry is valid
+        <paper-button id='pagibutton' raised >More</paper-button> <div style="display:inline-block;">
+        <h3>Nearest [[res.length]] places</h3> <h4 style="color:red;">Notice! the order of below list is for ascending distance from the location you just picked</h4></div>
+    </span>
 
-<iron-list id="ironl" items="[[res]]" as="restaurant" >
-  <template>
-      <div class='item layout horizontal justified'>
+    <iron-list id="ironl" items="[[res]]" as="restaurant" >
+      <template>
+        <div class='item layout horizontal justified'>
           <paper-card heading="[[restaurant.name]]" elevation="2">
-              <div class="card-content">
-                  <div class="layout horizontal around-justified">
-
-                  <div><b>Rating</b>: [[restaurant.rating]]</div>
-                  <div><b>PriceLevel</b>: [[restaurant.price_level]]</div>
-                  <div><b>Open Now</b>: [[restaurant.opening_hours.open_now ]]</div>
-               
-                  <div><b>PlaceID</b>: [[restaurant.place_id]]</div>
-
-                  </div>
-
+            <div class="card-content">
+              <div class="layout horizontal around-justified">
+                <div><b>Rating</b>: [[restaurant.rating]]</div>
+                <div><b>PriceLevel</b>: [[restaurant.price_level]]</div>
+                <div><b>Open Now</b>: [[restaurant.opening_hours.open_now ]]</div>
+                <div><b>PlaceID</b>: [[restaurant.place_id]]</div>
+              </div>
             </div>
-
-       </div>
+          </paper-card>
+        </div>
       </template>
-  </iron-list>
-
+    </iron-list>
 <!-- <google-map latitude="37.77493" longitude="-122.41942" fit-to-markers apiKey="AIzaSyA1jZJXlG8oo8BU-jye32H61p68GcjUNyQ">
     <google-map-marker latitude="37.779" longitude="-122.3892"
         draggable="true" title="Go Giants!"></google-map-marker>
     <google-map-marker latitude="37.777" longitude="-122.38911"></google-map-marker>
   </google-map> -->
-
-
   </template>
-
   <script>
-
-    /**
-     * @customElement
-     * @polymer
-     */
     class MySearch extends Polymer.Element {
       static get is() { return 'my-search'; }
       static get properties() {
@@ -150,24 +132,21 @@ label="Pick a place, any place" on-value-changed="wipeout" on-place-changed="cha
           place:{
             type: Object
           },
-
           list: {
             type: Array,
             value: []
-                        },
-        res: {
-          type: Array,
-          notify: true
-        }
-
-
+          },
+          res: {
+            type: Array,
+            notify: true
+          }
         };
       }
 
      changed(e){
       this.inv = true;
       //console.log(e.target.place.place_id);
-     if(typeof e.target.place.place_id !== "undefined"){
+      if(typeof e.target.place.place_id !== "undefined"){
        // if (e.target.value.place_id.length > 0){
                this.inv = false;
         //console.log(e.target.searchPlaces(e.target.place,'restaurant'));
@@ -179,17 +158,11 @@ label="Pick a place, any place" on-value-changed="wipeout" on-place-changed="cha
           // console.log(response);});
           // });
           }
-
       }
-
     wipeout(){
       this.res = [];
       //this.$.ironl.items = [];
     }
-
-
-
-
       /**
 
       _searchplaces(place, query){
@@ -210,11 +183,7 @@ label="Pick a place, any place" on-value-changed="wipeout" on-place-changed="cha
         //this.$.input.placeSearch('restaurant');
         }
    */
-
-
-
     }
-
     window.customElements.define(MySearch.is, MySearch);
   </script>
 </dom-module>
