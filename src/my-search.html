@@ -5,7 +5,9 @@
 
 <link rel="import" href="../bower_components/google-map/google-map.html">
 <link rel="import" href="../bower_components/google-map/google-map-search.html">
-<link rel="import" href="../bower_components/google-map/google-map-marker.html">
+<link rel="import" href="../bower_components/google-map/google-map-point.html">
+<link rel="import" href="../bower_components/google-map/google-map-poly.html">
+<link rel="import" href="../bower_components/google-map/google-map-directions.html">
 <link rel="import" href="../bower_components/google-apis/google-maps-api.html">
 
 <link rel="import" href="../bower_components/paper-input-place/paper-input-place.html">
@@ -20,6 +22,10 @@
 <link rel="import" href="../bower_components/iron-list/iron-list.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
 
 
 <dom-module id="my-search">
@@ -86,30 +92,54 @@
         background-color: var(--paper-indigo-500);
         color: white;
       }
-    </style>
-    <paper-input-place id='input' api-key="AIzaSyA1jZJXlG8oo8BU-jye32H61p68GcjUNyQ" class="custom" value="{{val}}" place="{{place}}"
-    label="Pick a place, any place" on-value-changed="wipeout" on-place-changed="changed"  nearbyrestaurants={{res}} hide-error></paper-input-place>
-    <span  id='validate' hidden$="[[inv]]" style="color:green;"> Entry is valid
-        <paper-button id='pagibutton' raised >More</paper-button> <div style="display:inline-block;">
-        <h3>Nearest [[res.length]] places</h3> <h4 style="color:red;">Notice! the order of below list is for ascending distance from the location you just picked</h4></div>
-    </span>
 
-    <iron-list id="ironl" items="[[res]]" as="restaurant" >
-      <template>
-        <div class='item layout horizontal justified'>
-          <paper-card heading="[[restaurant.name]]" elevation="2">
-            <div class="card-content">
-              <div class="layout horizontal around-justified">
-                <div><b>Rating</b>: [[restaurant.rating]]</div>
-                <div><b>PriceLevel</b>: [[restaurant.price_level]]</div>
-                <div><b>Open Now</b>: [[restaurant.opening_hours.open_now ]]</div>
-                <div><b>PlaceID</b>: [[restaurant.place_id]]</div>
-              </div>
-            </div>
-          </paper-card>
-        </div>
+      google-map {
+        height: 600px;
+        width: 600px;
+      }
+    
+    </style>
+<paper-input-place id='input' api-key="[[key]]" class="custom" 
+ value="{{val}}" place="{{place}}" nearbyrestaurants="{{res}}"
+label="Pick a place, any place" on-value-changed="wipeout" on-place-changed="changed"  hide-error></paper-input-place>
+
+  <span  id='validate' hidden$="[[inv]]" style="color:green;"> Entry is valid
+    <paper-button id='pagibutton' raised >More</paper-button> <div style="display:inline-block;">
+
+    <h3>Nearest [[res.length]] places</h3> <h4 style="color:red;">Notice! the order of below list is for ascending distance from the location you just picked</h4></div> 
+  </span> 
+
+
+  
+
+<iron-list id="ironl" items="[[res]]" as="restaurant" >
+  <template>    
+          <paper-card heading="[[restaurant.name]]" restaurant="[[restaurant]]" elevation="2" on-click="showroute">
+              <div class="card-content">
+                  <div class="layout horizontal around-justified">
+
+                  <div><b>Rating</b>: [[restaurant.rating]]</div>
+                  <div><b>PriceLevel</b>: [[restaurant.price_level]]</div>
+                  <div><b>Open Now</b>: [[restaurant.opening_hours.open_now ]]</div>
+               
+                  <div><b>PlaceID</b>: [[restaurant.place_id]]</div>
+
+                  </div>
+            </div>   
+            </paper-card>   
       </template>
-    </iron-list>
+  </iron-list>
+
+ 
+  
+  <paper-dialog id="route" autoFitOnAttach entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+      <google-map map="{{map}}" api-key="[[key]]"></google-map>
+      <google-map-directions map="[[map]]"
+      start-address="[[place.latLng]]" end-address="[[destination]]">
+    </google-map-directions>
+  </paper-dialog>
+ 
+   
 <!-- <google-map latitude="37.77493" longitude="-122.41942" fit-to-markers apiKey="AIzaSyA1jZJXlG8oo8BU-jye32H61p68GcjUNyQ">
     <google-map-marker latitude="37.779" longitude="-122.3892"
         draggable="true" title="Go Giants!"></google-map-marker>
@@ -125,6 +155,10 @@
             type: String,
             value: 'my-search'
           },
+          key: {
+            type: String,
+            value: 'AIzaSyA1jZJXlG8oo8BU-jye32H61p68GcjUNyQ'
+          },
           inv: {
             type: Boolean,
             value: true
@@ -135,11 +169,18 @@
           list: {
             type: Array,
             value: []
-          },
-          res: {
-            type: Array,
-            notify: true
-          }
+                        },
+        res: {
+          type: Array,
+          notify: true
+        },
+        destination:{
+          type: String,
+          notify: true
+
+        }
+
+
         };
       }
 
@@ -151,18 +192,35 @@
                this.inv = false;
         //console.log(e.target.searchPlaces(e.target.place,'restaurant'));
         //console.log(e.target.place);
-        e.target.searchPlaces(e.target.place,'restaurant', this.$.pagibutton);  //restaurant is queryKey
-        //p.then(response => this.list = response);
-          // response.forEach((detail)=>{
-          // p.then(response => {
-          // console.log(response);});
-          // });
+        var p = e.target.searchPlaces(e.target.place,'restaurant', this.$.pagibutton);  //restaurant is queryKey
+
+          //  p.then(response => this.list = response);
+          // response.forEach((detail)=>{  });
+          p.then(response => {
+          console.log(response);});
+        
           }
       }
     wipeout(){
+      //this.splice("res", 0, this.res.length);
+
       this.res = [];
       //this.$.ironl.items = [];
     }
+
+
+    showroute(e){
+      //console.log(e.target.restaurant.geometry.location.lat());
+      this.destination = {
+         lat: e.target.restaurant.geometry.location.lat(),
+         lng: e.target.restaurant.geometry.location.lng()
+        };
+
+        this.$.route.open();
+
+
+    }
+
       /**
 
       _searchplaces(place, query){
