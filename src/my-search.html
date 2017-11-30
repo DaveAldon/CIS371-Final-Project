@@ -192,14 +192,14 @@ label="Pick a place, any place" on-value-changed="wipeout" on-place-changed="cha
                this.inv = false;
         //console.log(e.target.searchPlaces(e.target.place,'restaurant'));
         //console.log(e.target.place);
-        var p = e.target.searchPlaces(e.target.place,'restaurant', this.$.pagibutton);  //restaurant is queryKey
+        e.target.searchPlaces(e.target.place,'restaurant', this.$.pagibutton);  //restaurant is queryKey
 
           //  p.then(response => this.list = response);
           // response.forEach((detail)=>{  });
-          p.then(response => {
-          console.log(response);});
+      //     p.then(response => {
+      //     console.log(response);});
         
-          }
+         }
       }
     wipeout(){
       //this.splice("res", 0, this.res.length);
