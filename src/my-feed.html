@@ -16,7 +16,7 @@
         padding: 10px;
       }
       iron-list {
-        width: 50%;
+        width: 100%;
         height: 100%;
       }
       paper-card {
@@ -37,30 +37,60 @@
         background-color: salmon;
         width: 100%;
         float: right;
+        margin-left: 5px;
       }
       #cardinfo {
         background-color: lightgreen;
       }
-    </style>
+      #private-feed, #public-feed {
+        width: 50%;
+        float: left;
+      }
 
-    <iron-list items="[[qryData]]" as="ord">
-    <template>
-     <div id="card-holder">
-      <paper-card>
-        <div id="cardinfo" class="layout horizontal">
-          <div class="layout vertical">
-            <div class="card-content"><h3>Name: [[ord.name]]</h3></div>
+    </style>
+    <div id="public-feed">
+      <h2>Public Feed</h2>
+      <iron-list items="[[qryData]]" as="ord">
+      <template>
+       <div id="card-holder">
+        <paper-card>
+          <div id="cardinfo" class="layout horizontal">
+            <div class="layout vertical">
+              <div class="card-content"><h3>Name: [[ord.name]]</h3></div>
+            </div>
+            <div class="card-actions">
+              <paper-button id="delitembtn" on-click="toggledel">
+                <iron-icon icon="icons:delete"></iron-icon>
+              Delete</paper-button>
+              </div>
+            </div>
+          </paper-card>
           </div>
-          <div class="card-actions">
-            <paper-button id="delitembtn" on-click="toggledel">
-              <iron-icon icon="icons:delete"></iron-icon>
-            Delete</paper-button>
+        </template>
+      </iron-list>
+    </div>
+
+    <div id="private-feed">
+      <h2>Private Feed</h2>
+      <iron-list items="[[qryData]]" as="ord">
+        <template>
+         <div id="card-holder">
+          <paper-card>
+            <div id="cardinfo" class="layout horizontal">
+              <div class="layout vertical">
+                <div class="card-content"><h3>Name: [[ord.name]]</h3></div>
+              </div>
+              <div class="card-actions">
+                <paper-button id="delitembtn" on-click="toggledel">
+                  <iron-icon icon="icons:delete"></iron-icon>
+                Delete</paper-button>
+                </div>
+              </div>
+            </paper-card>
           </div>
-        </div>
-      </paper-card>
-     </div>
-    </template>
-  </iron-list>
+        </template>
+      </iron-list>
+    </div>
   </template>
 
   <script>
