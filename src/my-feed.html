@@ -9,7 +9,14 @@
 
 <dom-module id="my-feed">
   <template>
-    <firebase-query path="/public-feed" data="{{qryData}}"></firebase-query>
+    <firebase-app id="myFireApp" auth-domain="cheap-eats-72242.firebaseapp.com"
+      database-url="https://cheap-eats-72242.firebaseio.com"
+      api-key="AIzaSyB_UNMUaAogW_KHDBniOQoE_GfitN36mgo">
+    </firebase-app>
+    <firebase-auth id="auth" user="{{user}}" provider="google" on-error="handleError">
+    </firebase-auth>
+    <firebase-query path="/private-feed/[[user.uid]]" data="{{privateData}}"></firebase-query>
+    <firebase-query path="/public-feed" data="{{publicData}}"></firebase-query>
     <style include="shared-styles">
       :host {
         display: block;
@@ -50,7 +57,7 @@
     </style>
     <div id="public-feed">
       <h2>Public Feed</h2>
-      <iron-list items="[[qryData]]" as="ord">
+      <iron-list items="[[publicData]]" as="ord">
       <template>
        <div id="card-holder">
         <paper-card>
@@ -61,7 +68,7 @@
             <div class="card-actions">
               <paper-button id="delitembtn" on-click="toggledel">
                 <iron-icon icon="icons:delete"></iron-icon>
-              Delete</paper-button>
+              Remove</paper-button>
               </div>
             </div>
           </paper-card>
@@ -72,7 +79,7 @@
 
     <div id="private-feed">
       <h2>Private Feed</h2>
-      <iron-list items="[[qryData]]" as="ord">
+      <iron-list items="[[privateData]]" as="ord">
         <template>
          <div id="card-holder">
           <paper-card>
@@ -96,6 +103,16 @@
   <script>
     class MyFeed extends Polymer.Element {
       static get is() { return 'my-feed'; }
+      ready() {
+        super.ready();
+      }
+      toggledel() {
+        var uid = this.$.auth.user.uid
+        var dbRef = this.$.myFireApp.app.database();
+        dbRef.ref('/private-feed/' + uid).push().set({
+          name: "mcdonalds"
+        });
+      }
     }
 
     window.customElements.define(MyFeed.is, MyFeed);
