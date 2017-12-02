@@ -26,12 +26,13 @@
 <link rel="import" href="../bower_components/neon-animation/web-animations.html">
 <link rel="import" href="../bower_components/neon-animation/animations/scale-up-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../bower_components/salte-rating/salte-rating.html">
+
 
 
 <dom-module id="my-search">
   <template>
-    <style include="iron-flex iron-flex-alignment"></style>
-    <style >
+        <style include="iron-flex iron-flex-alignment">
       :host {
         display: block;
       }
@@ -76,19 +77,42 @@
           margin-left: 1em;
         };
       }
+
+      salte-rating{
+        --salte-rating-value-color: gold;
+        display: inline-block;
+      }
+
+      #card-holder {
+      padding: 5px;
+    }
+
+    #card-content {
+      background-color: mediumaquamarine;
+    }
+    
+    .card-detail {
+     padding-top: 10px; 
+     padding-left: 10px;
+    }
+
+    paper-card:hover {
+      @apply(--shadow-elevation-16dp);
+    }
       iron-list {
-        height: 80vh;
-        width: 80vw;
+        width: 60%;
+        height: 50%;
         display:block;
         margin: auto;
       }
       paper-card {
         width: 100%;
-        background: lightgoldenrodyellow;
-        border-radius: 8px;
+        background: seashell;
+        border-radius: 10px;
       }
+      
       paper-button {
-        --paper-button-ink-color: blue;
+        --paper-button-ink-color: purple;
         background-color: var(--paper-indigo-500);
         color: white;
       }
@@ -113,30 +137,37 @@ label="Pick a place, any place" on-value-changed="wipeout" on-place-changed="cha
   
 
 <iron-list id="ironl" items="[[res]]" as="restaurant" >
-  <template>    
+    <template>
+        <div id="card-holder">
           <paper-card heading="[[restaurant.name]]" restaurant="[[restaurant]]" elevation="2" on-click="showroute">
-              <div class="card-content">
-                  <div class="layout horizontal around-justified">
+            <div id="card-content" class="layout horizontal justified">
+             <div class="layout horizontal justified">
+                <div class="card-detail"><b>Rating: <salte-rating icon="star" value=[[restaurant.rating]] disabled></b></salte-rating></div>
+                <div class="card-detail"><b>PriceLevel: <salte-rating icon="icons:editor:attach-money" value=[[restaurant.price_level]] disabled></salte-rating></b></salte-rating></div>
+            </div>
+             <div class="card-action">
+                <paper-button raised on-click=""><iron-icon icon="icons:favorite"></iron-icon></paper-button>                      
+            </div>
+           </div>
+         </paper-card>
+       </div>
+    </template>
 
-                  <div><b>Rating</b>: [[restaurant.rating]]</div>
-                  <div><b>PriceLevel</b>: [[restaurant.price_level]]</div>
-                  <div><b>Open Now</b>: [[restaurant.opening_hours.open_now ]]</div>
-               
-                  <div><b>PlaceID</b>: [[restaurant.place_id]]</div>
-
-                  </div>
-            </div>   
-            </paper-card>   
-      </template>
   </iron-list>
 
  
   
   <paper-dialog id="route" autoFitOnAttach entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+      <div class="buttons">
+         <iron-icon  dialog-confirm autofocus icon="icons:close">
+        </iron-icon>
+        </div>
       <google-map map="{{map}}" api-key="[[key]]"></google-map>
       <google-map-directions map="[[map]]"
       start-address="[[place.latLng]]" end-address="[[destination]]">
     </google-map-directions>
+
+    
   </paper-dialog>
  
    

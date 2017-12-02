@@ -20,7 +20,8 @@
     "iron-icons": "PolymerElements/iron-icons#^2.0.1",
     "paper-input": "PolymerElements/paper-input#^2.0.3",
     "iron-image": "PolymerElements/iron-image#^2.1.2",
-    "paper-dialog": "PolymerElements/paper-dialog#^2.0.0"
+    "paper-dialog": "PolymerElements/paper-dialog#^2.0.0",
+    "salte-rating": "salte-io/salte-rating#^2.0.0"
   },
   "resolutions": {
     "polymer": "^2.0.0"
