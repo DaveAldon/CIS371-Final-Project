@@ -98,7 +98,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         	.catch(e => console.log(e.message));
         firebase.auth().onAuthStateChanged(function(user) {
           if (user) {
-            document.body.innerHTML = "Hello " + user.email + ", you are logged in.";
+            // document.body.setAttribute("onload", window.location.href = '../feed');
+            document.body.innerHTML = 'Hello ' + user.email + ', you are logged in.</br><p><a href="../search">Location Search</a></p></br><p><a href="../feed">Public and Private Feeds</a></p>';
           } else {
             console.log("no user signed in");
           }
