@@ -33,39 +33,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <auth-login></auth-login>
   </template>
 
-    <!-- <script src="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.js"></script>
-    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.css" />
-    <script type="text/javascript">
-      // FirebaseUI config.
-      var uiConfig = {
-        signInSuccessUrl: 'my-login.html',
-        signInOptions: [
-          // Leave the lines as is for the providers you want to offer your users.
-          firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-          firebase.auth.EmailAuthProvider.PROVIDER_ID,
-        ],
-        // Terms of service url.
-        tosUrl: '<your-tos-url>'
-      };
-
-      // Initialize the FirebaseUI Widget using Firebase.
-      var ui = new firebaseui.auth.AuthUI(firebase.auth());
-      // The start method will wait until the DOM is loaded.
-      ui.start('#firebaseui-auth-container', uiConfig);
-    </script>
-
-  <div id="firebaseui-auth-container"></div>
-
-  <script>
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        document.body.innerHTML = '<h1> Hello ' + user.displayName + ', you are logged in.';
-      } else {
-        console.log("no user signed in");
-      }
-    });
-  </script> -->
-
   <script>
     class MyLogin extends Polymer.Element {
       static get is() { return 'my-login'; }
@@ -76,10 +43,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <dom-module id="auth-login">
   <template>
-    <paper-input id="email" label="Email" error-message="Please enter an email." required></paper-input>
-    <paper-input id="password" label="Password" error-message="Please enter a password." required type="password"></paper-input>
-    <paper-button raisedButton id="test" on-tap="loginEmail">Log In</paper-button>
-    <paper-button raisedButton id="test" on-tap="signupEmail">Sign Up</paper-button>
+    <h2 id="loginStatus">No user signed in.</h2>
     <paper-button raisedButton id="test" on-tap="login">Log in with Google Account</paper-button>
     <paper-button raisedButton id="btnLogout" on-tap="logout">Log Out</paper-button>
   </template>
@@ -87,55 +51,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script>
     Polymer({
       is: 'auth-login',
-      loginEmail: function(e) {
-      	// firebase.initializeApp();
-        const email = this.$.email.value;
-        const password = this.$.password.value;
-        const auth = firebase.auth();
-        const promise = auth.signInWithEmailAndPassword(email, password);
-        promise
-            .then(user => console.log(user))
-        	.catch(e => console.log(e.message));
-        firebase.auth().onAuthStateChanged(function(user) {
-          if (user) {
-            // document.body.setAttribute("onload", window.location.href = '../feed');
-            document.body.innerHTML = 'Hello ' + user.email + ', you are logged in.</br><p><a href="../search">Location Search</a></p></br><p><a href="../feed">Public and Private Feeds</a></p>';
-          } else {
-            console.log("no user signed in");
-          }
-        });
-      },
-      signupEmail: function(ee) {
-       const email = this.$.email.value;
-       const password = this.$.password.value;
-       const auth = firebase.auth();
-       const promise = auth.createUserWithEmailAndPassword(email, password);
-       promise
-       	.then(user => console.log(user))
-       	.catch(ee => console.log(ee.message));
-        firebase.auth().onAuthStateChanged(function(user) {
-          if (user) {
-            document.body.innerHTML = '<div> Hello ' + user.email + ', you are logged in.</div>';
-          } else {
-            console.log("no user signed in");
-          }
-        });
-     },
        login: function(eee) {
+        var displayObj = this.$.loginStatus;
         var google = new firebase.auth.GoogleAuthProvider();
         firebase.auth().signInWithPopup(google);
         firebase.auth().onAuthStateChanged(function(user) {
           if (user) {
-            document.body.innerHTML = '<div> Hello ' + user.displayName + ', you are logged in.</div>';
+            displayObj.innerHTML = 'Hello ' + user.displayName + ', you are logged in.';
           } else {
-            console.log("no user signed in");
+            displayObj.innerHTML = "No user signed in.";
           }
         });
       },
        logout: function(eeee) {
+        var displayObj = this.$.loginStatus;
         firebase.auth().signOut();
-        this.$.email.value = "";
-        this.$.password.value = "";
       }
     });
   </script>
