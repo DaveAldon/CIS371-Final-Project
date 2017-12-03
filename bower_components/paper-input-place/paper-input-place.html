@@ -56,7 +56,7 @@ See README.MD for more use examples, styling, api and a link to a live demo page
 <dom-module id="paper-input-place">
   <template>
     <style>
-       :host {
+      :host {
         display: inline-block;
       }
 
@@ -151,7 +151,7 @@ See README.MD for more use examples, styling, api and a link to a live demo page
           type: Object
 
         },
-     
+
         /*
          * region bias options
          */
@@ -177,7 +177,7 @@ See README.MD for more use examples, styling, api and a link to a live demo page
         searchBounds: {
           type: Object
         },
-        
+
         /**
          * bias search results by type
          * permitted values: 
@@ -337,8 +337,8 @@ See README.MD for more use examples, styling, api and a link to a live demo page
       },
 
       _computeUrl: function (akey) {
-      // return "https://maps.googleapis.com/maps/api/js?key="+akey+"&libraries=places&callback=initAutocomplete";
-      return "https://maps.googleapis.com/maps/api/js?callback=%%callback%%&v=3.exp&libraries=drawing,geometry,places,visualization&key=" + akey;
+        // return "https://maps.googleapis.com/maps/api/js?key="+akey+"&libraries=places&callback=initAutocomplete";
+        return "https://maps.googleapis.com/maps/api/js?callback=%%callback%%&v=3.exp&libraries=drawing,geometry,places,visualization&key=" + akey;
 
         // return "https://maps.googleapis.com/maps/api/js?callback=%%callback%%&v=3.exp&libraries=places&key=" + akey;
       },
@@ -346,7 +346,7 @@ See README.MD for more use examples, styling, api and a link to a live demo page
       _mapsApiLoaded: function () {
         if (!this._geocoder && !this._places && this.$.locationsearch && this.$.locationsearch.$.nativeInput) {
           this._geocoder = new google.maps.Geocoder();
-        this._placesearch =  new google.maps.places.PlacesService(document.createElement('div'));
+          this._placesearch = new google.maps.places.PlacesService(document.createElement('div'));
           this._places = new google.maps.places.Autocomplete(this.$$('#locationsearch').$$('#nativeInput'), {});
           google.maps.event.addListener(this._places, 'place_changed', this._onChangePlace.bind(this));
           this._setApiLoaded(true);
@@ -539,14 +539,14 @@ See README.MD for more use examples, styling, api and a link to a live demo page
        * @param  {String} query Optional - Geocoder Request options
        * @return {Promise<Array>}         A promise for a place object or a status on failure
        */
-      searchPlaces: function (place, query, pagibutton) {
+      searchPlaces: function (place, query, pagibutton, option) {
         return new Promise(function (resolve, reject) {
           if (!this._placesearch) {
             reject('Search library not ready.');
           } else {
             if (typeof place !== "undefined" && query) {
               var opts = {};
-              opts.location = new google.maps.LatLng(place.latLng.lat,place.latLng.lng);
+              opts.location = new google.maps.LatLng(place.latLng.lat, place.latLng.lng);
               opts.raduis = '500';
               opts.query = query;
               opts.minPriceLevel = 0;
@@ -554,21 +554,31 @@ See README.MD for more use examples, styling, api and a link to a live demo page
             }
             this._placesearch.textSearch(opts, function (results, status, pagination) {
               if (status == google.maps.places.PlacesServiceStatus.OK) {
-                                    resolve(results);
-                                   results.forEach((element)=>{
-                                        this.push('nearbyrestaurants', element);
-                                   })                                   
-                                    if (pagination.hasNextPage) {
-                                        pagibutton.onclick = ()=>{
-                                          //this.more = results;
-                                          //console.log(results);
-                                          pagination.nextPage();
+                resolve(option);
+               // console.log(option);
+                results.sort(function (x, y) {
+                  var n = x.price_level - y.price_level;
+                  if (n !== 0) {
+                    return n;
+                  }
 
-                                        }
-                                    }
-                                    else{
+                  return y.rating - x.rating;
+                });
 
-                                    }
+                results.forEach((element) => {
+                  this.push('nearbyrestaurants', element);
+                })
+                if (pagination.hasNextPage) {
+                  pagibutton.onclick = () => {
+                    //this.more = results;
+                    //console.log(results);
+                    pagination.nextPage();
+
+                  }
+                }
+                else {
+
+                }
               } else {
                 reject(status);
               }
@@ -577,6 +587,35 @@ See README.MD for more use examples, styling, api and a link to a live demo page
         }.bind(this));
       },
 
+      orderchanged: function (option) {
+        console.log(option);
+        var arr = this.nearbyrestaurants;
+        switch (option) {
+          case 'High Rating with Low Price':
+            arr.sort(function (x, y) {
+              var n = x.price_level - y.price_level;
+              if (n !== 0) {
+                return n;
+              }
+
+              return y.rating - x.rating;
+            });
+            break;
+          case 'High Rating with High Price':
+            arr.sort(function (x, y) {
+              var n = y.price_level - x.price_level;
+              if (n !== 0) {
+                return n;
+              }
+
+              return y.rating - x.rating;
+            });
+            break;
+
+        }
+        this.nearbyrestaurants = arr;
+
+      },
 
       getDetail: function (placeid) {
         return new Promise(function (resolve, reject) {
@@ -587,15 +626,15 @@ See README.MD for more use examples, styling, api and a link to a live demo page
               var opts = {};
               opts.placeId = placeid;
             }
-            
+
             this._placesearch.getDetails(opts, function (results, status) {
               if (status == google.maps.places.PlacesServiceStatus.OK) {
-                                  //  console.log(results.photos[0].getUrl({'maxWidth': 400}));
-                                  //  console.log(results.photos[1].getUrl({'maxWidth': 400}));
+                //  console.log(results.photos[0].getUrl({'maxWidth': 400}));
+                //  console.log(results.photos[1].getUrl({'maxWidth': 400}));
 
-                                    resolve(results);
-                                                                    
-                              
+                resolve(results);
+
+
               } else {
                 reject(status);
               }
@@ -603,6 +642,9 @@ See README.MD for more use examples, styling, api and a link to a live demo page
           }
         }.bind(this));
       },
+
+
+
 
       _onChangePlace: function (e) {
         var pl = this._places.getPlace();
@@ -726,8 +768,8 @@ See README.MD for more use examples, styling, api and a link to a live demo page
       },
       /**
        * sets the focus to the input field
-       */ 
-      focus: function() {
+       */
+      focus: function () {
         this.$$('#locationsearch').$.nativeInput.focus();
       }
 

@@ -31,22 +31,28 @@
 <link rel="import" href="../bower_components/l2t-paper-slider/l2t-paper-slider.html">
 <link rel="import" href="../bower_components/photo-gallery/photo-gallery.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu-light.html">
 
 
 
 
 <dom-module id="my-search">
   <template>
-        <style include="iron-flex iron-flex-alignment">
+    <style is="custom-style" include="iron-flex iron-flex-alignment demo-pages-shared-styles">
       :host {
         display: block;
       }
+
       google-map {
         height: 300px;
       }
+
       paper-input-place {
         width: 450px;
       }
+
       paper-input-place.custom {
         --paper-input-container-underline: {
           border-bottom: 2px dotted blue;
@@ -70,52 +76,59 @@
           font-weight: bold;
         }
       }
-        /* and a custom property also */
+
+      /* and a custom property also */
+
       paper-input-place {
         --paper-input-place-icon-mixin: {
           color: green;
-        };
+        }
+        ;
         --paper-input-place-prefix-icon-mixin: {
           margin-right: 1em;
-        };
+        }
+        ;
         --paper-input-place-postfix-icon-mixin: {
           margin-left: 1em;
-        };
+        }
+        ;
       }
 
-      salte-rating{
+      salte-rating {
         --salte-rating-value-color: gold;
         display: inline-block;
       }
 
       #card-holder {
-      padding: 5px;
-    }
+        padding: 5px;
+      }
 
-    #card-content {
-      background-color: mediumaquamarine;
-    }
-    
-    .card-detail {
-     padding-top: 10px; 
-     padding-left: 10px;
-    }
+      #card-content {
+        background-color: mediumaquamarine;
+      }
 
-    paper-card:hover {
-      @apply(--shadow-elevation-16dp);
-    }
+      .card-detail {
+        padding-top: 10px;
+        padding-left: 10px;
+      }
+
+      paper-card:hover {
+        @apply(--shadow-elevation-16dp);
+      }
+
       iron-list {
         width: 60%;
         height: 50%;
-        display:block;
+        display: block;
         margin: auto;
       }
+
       paper-card {
         width: 100%;
         background: seashell;
         border-radius: 10px;
       }
-      
+
       paper-button {
         --paper-button-ink-color: purple;
         background-color: var(--paper-indigo-500);
@@ -129,60 +142,83 @@
 
       paper-slide {
         --paper-slide-width: 450px;
-        
+
       }
 
-      p {width: 400px;
-        word-wrap: break-word; }
-   
-    
+      paper-dropdown-menu-light,
+      paper-listbox {
+        width: 230px;
+      }
+
+      p {
+        width: 400px;
+        word-wrap: break-word;
+      }
     </style>
-<paper-input-place id='input' api-key="[[key]]" class="custom" 
- value="{{val}}" place="{{place}}" nearbyrestaurants="{{res}}"
-label="Pick a place, any place" on-value-changed="wipeout" on-place-changed="changed"  hide-error></paper-input-place>
+    <paper-input-place id='input' api-key="[[key]]" class="custom" value="{{val}}" place="{{place}}" nearbyrestaurants="{{res}}"
+      label="Pick a place, any place" on-value-changed="wipeout" on-place-changed="changed" hide-error></paper-input-place>
 
-  <span  id='validate' hidden$="[[inv]]" style="color:green;"> Entry is valid
-    <paper-button id='pagibutton' raised >More</paper-button> <div style="display:inline-block;">
+    <span id='validate' hidden$="[[inv]]" style="color:green;"> Entry is valid
+      <paper-button id='pagibutton' raised>More</paper-button>
+      <h3 style="display:inline-block; margin:auto;">Nearest [[res.length]] places</h3>
+      <paper-dropdown-menu-light id="option" label="Result Order" on-selected-item-changed="changeorder" style="float: right; padding-right:100px;">
+        <paper-listbox slot="dropdown-content" class="dropdown-content" selected="0">
+          <paper-item>High Rating with Low Price</paper-item>
+          <paper-item>Low Rating with Low Price</paper-item>         
+          <paper-item>High Rating with High Price</paper-item>
+          <paper-item>Low Rating with High Price</paper-item>
+        </paper-listbox>
+      </paper-dropdown-menu-light>
+      <!-- <h3>Nearest [[res.length]] places</h3> <h4 style="color:red;">Notice! the order of below list is for ascending distance from the location you just picked</h4></div>  -->
+    </span>
 
-    <h3>Nearest [[res.length]] places</h3> <h4 style="color:red;">Notice! the order of below list is for ascending distance from the location you just picked</h4></div> 
-  </span> 
 
 
-  
 
-<iron-list id="ironl" items="[[res]]" as="restaurant" >
-    <template>
+    <iron-list id="ironl" items="[[res]]" as="restaurant">
+      <template>
         <div id="card-holder">
           <paper-card heading="[[restaurant.name]]" restaurant="[[restaurant]]" elevation="2" on-click="showrouteNmore">
             <div id="card-content" class="layout horizontal justified">
-             <div class="layout horizontal justified">
-                <div class="card-detail"><b>Rating: <salte-rating icon="star" value=[[restaurant.rating]] disabled></b></salte-rating></div>
-                <div class="card-detail"><b>PriceLevel: <salte-rating icon="icons:editor:attach-money" value=[[restaurant.price_level]] disabled></salte-rating></b></salte-rating></div>
+              <div class="layout horizontal justified">
+                <div class="card-detail">
+                  <b>Rating:
+                    <salte-rating icon="star" value=[[restaurant.rating]] disabled>
+                  </b>
+                  </salte-rating>
+                </div>
+                <div class="card-detail">
+                  <b>PriceLevel:
+                    <salte-rating icon="icons:editor:attach-money" value=[[restaurant.price_level]] disabled></salte-rating>
+                  </b>
+                  </salte-rating>
+                </div>
+              </div>
+              <div class="card-action">
+                <paper-button raised on-click="">
+                  <iron-icon icon="icons:favorite"></iron-icon>
+                </paper-button>
+              </div>
             </div>
-             <div class="card-action">
-                <paper-button raised on-click=""><iron-icon icon="icons:favorite"></iron-icon></paper-button>                      
-            </div>
-           </div>
-         </paper-card>
-       </div>
-    </template>
+          </paper-card>
+        </div>
+      </template>
 
-  </iron-list>
+    </iron-list>
 
- 
-  
-  <paper-dialog id="route" autoFitOnAttach entry-animation="scale-up-animation" exit-animation="fade-out-animation">
-      <h3 style="float: left">Map &amp; More</h3>      
-    <div class="buttons">         
-         <iron-icon  dialog-confirm autofocus icon="icons:close">
+
+
+    <paper-dialog id="route" autoFitOnAttach entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+      <h3 style="float: left">Map &amp; More</h3>
+      <div class="buttons">
+        <iron-icon dialog-confirm autofocus icon="icons:close">
         </iron-icon>
-    </div>
-  <div class="layout horizontal justified" style="width:1200px">            
-      <google-map map="{{map}}" api-key="[[key]]"></google-map>
-      <google-map-directions map="[[map]]"
-      start-address="[[place.latLng]]" end-address="[[destination]]">
-    </google-map-directions>
-      <div class="layout vertical wrap" style="width:550px">
+      </div>
+      <div class="layout horizontal justified" style="width:1200px">
+        <google-map map="{{map}}" api-key="[[key]]"></google-map>
+        <google-map-directions map="[[map]]" start-address="[[place.latLng]]" end-address="[[destination]]">
+        </google-map-directions>
+        <div class="layout vertical wrap" style="width:550px">
           <!-- <photo-gallery height='120'>                                
       <div class='item' data-url='https://lh3.googleusercontent.com/p/AF1QipOOiGQgRhh_kozB2H6GcUtmwYsnbuvHOM3_bYTR=w902-k'></div>               
                   <div class='item' data-url='[photourls.0]'></div>
@@ -194,25 +230,27 @@ label="Pick a place, any place" on-value-changed="wipeout" on-place-changed="cha
                   
           </photo-gallery> -->
           <l2t-paper-slider auto-progress slide-duration="2" total-slides=[[reviews.length]]>
-              <template is="dom-repeat" items="[[photourls]]" as="photo">                            
-                  <iron-image src="[[photo]]"></iron-image>
-              </template>             
-           </l2t-paper-slider>
+            <template is="dom-repeat" items="[[photourls]]" as="photo">
+              <iron-image src="[[photo]]"></iron-image>
+            </template>
+          </l2t-paper-slider>
           <label>Reviews of recent visitors:</label>
           <l2t-paper-slider auto-progress slide-duration="2" total-slides=[[reviews.length]]>
-              <template is="dom-repeat" items="[[reviews]]" as="review">                            
-                  <paper-slide><p>"[[review.text]]"</p></paper-slide>
-              </template>             
-            </l2t-paper-slider>
-     </div>
+            <template is="dom-repeat" items="[[reviews]]" as="review">
+              <paper-slide>
+                <p>"[[review.text]]"</p>
+              </paper-slide>
+            </template>
+          </l2t-paper-slider>
+        </div>
 
-  </div>
+      </div>
 
-  </paper-dialog>
-  <!-- <h2>Hello [[pic0]]!</h2> -->
-  
-   
-<!-- <google-map latitude="37.77493" longitude="-122.41942" fit-to-markers apiKey="AIzaSyA1jZJXlG8oo8BU-jye32H61p68GcjUNyQ">
+    </paper-dialog>
+    <!-- <h2>Hello [[]]!</h2> -->
+
+
+    <!-- <google-map latitude="37.77493" longitude="-122.41942" fit-to-markers apiKey="AIzaSyA1jZJXlG8oo8BU-jye32H61p68GcjUNyQ">
     <google-map-marker latitude="37.779" longitude="-122.3892"
         draggable="true" title="Go Giants!"></google-map-marker>
     <google-map-marker latitude="37.777" longitude="-122.38911"></google-map-marker>
@@ -235,66 +273,110 @@ label="Pick a place, any place" on-value-changed="wipeout" on-place-changed="cha
             type: Boolean,
             value: true
           },
-          place:{
+          place: {
             type: Object
           },
           list: {
             type: Array,
             value: []
-                        },
-        res: {
-          type: Array,
-          notify: true
-        },
-        destination:{
-          type: String,
-          notify: true
+          },
+          res: {
+            type: Array,
+            notify: true
+          },
+          destination: {
+            type: String,
+            notify: true
 
-        },
-        reviews: {
-          type: Array,
-          notify: true
-        },
-        photourls: {
-          type: Array,
-          notify: true
-        },
-        
+          },
+          reviews: {
+            type: Array,
+            notify: true
+          },
+          photourls: {
+            type: Array,
+            notify: true
+          },
+
 
 
         };
       }
 
-     changed(e){
-      this.inv = true;
-      //console.log(e.target.place.place_id);
-      if(typeof e.target.place.place_id !== "undefined"){
-       // if (e.target.value.place_id.length > 0){
-               this.inv = false;
-        //console.log(e.target.searchPlaces(e.target.place,'restaurant'));
-        //console.log(e.target.place);
-        e.target.searchPlaces(e.target.place,'restaurant', this.$.pagibutton);  //restaurant is queryKey
+      changed(e) {
+        this.inv = true;
+        //console.log(e.target.place.place_id);
+        if (typeof e.target.place.place_id !== "undefined") {
+          // if (e.target.value.place_id.length > 0){
+          this.inv = false;
+          //console.log(e.target.searchPlaces(e.target.place,'restaurant'));
+          //console.log(e.target.place);
+          e.target.searchPlaces(e.target.place, 'restaurant', this.$.pagibutton, this.$.option);  //restaurant is queryKey
 
           //  p.then(response => this.list = response);
           // response.forEach((detail)=>{  });
-      //     p.then(response => {
-      //     console.log(response);});
-        
-         }
-      }
-    wipeout(){
-      //this.splice("res", 0, this.res.length);
+          //     p.then(response => {
+          //     console.log(response);});
+          //  e.target.nearbyrestaurants.sort(function (x, y) {
+          //                                     var n = y.price_level - x.price_level;
+          //                                     if (n !== 0) {
+          //                                         return n;
+          //                                     }
 
-      this.res = [];
-      //this.$.ironl.items = [];
+          //                                     return y.rating - x.rating;
+          //                                 }); 
+
+          //  console.log(this.$.option.value);
+        }
+
+      }
+
+      changeorder(e) {
+
+        console.log(e.target.value);
+
+        switch (e.target.value) {
+          case 'High Rating with Low Price':
+            return function (res) {
+              var n = x.price_level - y.price_level;
+              if (n !== 0) {
+                return n;
+              }
+              return y.rating - x.rating;
+            }
+              break;
+          case 'High Rating with High Price':
+            this.$.input.nearbyrestaurants.sort(function (x, y) {
+              var n = y.price_level - x.price_level;
+              if (n > 0) {
+                return n;
+              }
+
+              return y.rating - x.rating;
+            });
+            break;
+
+        // }
+
+      }
+
     }
 
 
-    showrouteNmore(e){
-      //console.log(e.target.restaurant.geometry.location.lat());
-      this.destination = {
-         lat: e.target.restaurant.geometry.location.lat(),
-         lng: e.target.restaurant.geometry.location.lng()
+
+      wipeout() {
+        //this.splice("res", 0, this.res.length);
+
+        this.res = [];
+        //this.$.ironl.items = [];
+      }
+
+
+      showrouteNmore(e) {
+        //console.log(e.target.restaurant.geometry.location.lat());
+        this.destination = {
+          lat: e.target.restaurant.geometry.location.lat(),
+          lng: e.target.restaurant.geometry.location.lng()
         };
 
         this.$.route.open();
@@ -307,10 +389,10 @@ label="Pick a place, any place" on-value-changed="wipeout" on-place-changed="cha
           //this.placephotos = response.photos;
           // console.log(this.photos);
           response.photos.forEach((element) => {
-         //  console.log(element.getUrl({'maxWidth': Math.floor(Math.random() * 800) + 400 }));
-          var url =  element.getUrl({'maxWidth': 280 });
-                //console.log(url);
-            arr.push(url); 
+            //  console.log(element.getUrl({'maxWidth': Math.floor(Math.random() * 800) + 400 }));
+            var url = element.getUrl({ 'maxWidth': 280 });
+            //console.log(url);
+            arr.push(url);
           });
           this.photourls = arr;
           // this.pic0 = arr[0];
@@ -318,14 +400,14 @@ label="Pick a place, any place" on-value-changed="wipeout" on-place-changed="cha
           // this.pic2 = arr[2];
           // this.pic3 = arr[3];
           // this.pic4 = arr[4];
-            
+
         });
-      
-          
-    
-      
-  }
-    
+
+
+
+
+      }
+
 
       /**
 

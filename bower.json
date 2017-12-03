@@ -24,7 +24,10 @@
     "salte-rating": "salte-io/salte-rating#^2.0.0",
     "l2t-paper-slider": "Link2Twenty/l2t-paper-slider#^2.0.0",
     "paper-tooltip": "PolymerElements/paper-tooltip#^2.0.1",
-    "photo-gallery": "supachailllpay/photo-gallery#^2.0.4"
+    "photo-gallery": "supachailllpay/photo-gallery#^2.0.4",
+    "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^2.0.0",
+    "paper-item": "PolymerElements/paper-item#^2.0.0",
+    "paper-listbox": "PolymerElements/paper-listbox#^2.0.0"
   },
   "resolutions": {
     "polymer": "^2.0.0"
