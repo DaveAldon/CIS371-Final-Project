@@ -66,14 +66,14 @@ function initAutocomplete() {
                       //   processResults(results);
                       // }
 
-                //console.log(results);
+                console.log(results);
                 if (status !== google.maps.places.PlacesServiceStatus.OK) {
                   return;
                 } else {
                  // searchReturn.push.apply(searchReturn, results);
                   processResults(results);
                   
-                  console.log(results);               
+                  //console.log(results);               
                   if (pagination.hasNextPage) {
                     $('#more').show();
 
@@ -119,17 +119,17 @@ function processResults(restaurants) {
   $('#list').append(`<h4> Nearest ${restaurants.length} around given address </h4>`);
 
   for (var i = 0; i < restaurants.length; i++) {
-    // service.getDetails({
-    //   placeId: restaurants[i].place_id
-    // }, callback);
-    // function callback(place, status) {
-    //   if (status == google.maps.places.PlacesServiceStatus.OVER_QUERY_LIMIT) {
-    //      setTimeout(1000);
-    //      i--;
-    //     console.log(status +" "+ i);
-    //        //redo the index which hits the limit , 1000 milisecond = 1 sec
+    service.getDetails({
+      placeId: restaurants[i].place_id
+    }, callback);
+    function callback(place, status) {
+      // if (status == google.maps.places.PlacesServiceStatus.OVER_QUERY_LIMIT) {
+        //  setTimeout(1000);
+        //  i--;
+        console.log(place);
+           //redo the index which hits the limit , 1000 milisecond = 1 sec
 
-    //   }
+       }
     //   else if(status == google.maps.places.PlacesServiceStatus.OK) {
       place = restaurants[i];
         try {

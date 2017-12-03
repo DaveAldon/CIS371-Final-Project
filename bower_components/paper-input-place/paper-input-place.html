@@ -577,6 +577,33 @@ See README.MD for more use examples, styling, api and a link to a live demo page
         }.bind(this));
       },
 
+
+      getDetail: function (placeid) {
+        return new Promise(function (resolve, reject) {
+          if (!this._placesearch) {
+            reject('Search library not ready.');
+          } else {
+            if (typeof placeid !== "undefined") {
+              var opts = {};
+              opts.placeId = placeid;
+            }
+            
+            this._placesearch.getDetails(opts, function (results, status) {
+              if (status == google.maps.places.PlacesServiceStatus.OK) {
+                                  //  console.log(results.photos[0].getUrl({'maxWidth': 400}));
+                                  //  console.log(results.photos[1].getUrl({'maxWidth': 400}));
+
+                                    resolve(results);
+                                                                    
+                              
+              } else {
+                reject(status);
+              }
+            }.bind(this));
+          }
+        }.bind(this));
+      },
+
       _onChangePlace: function (e) {
         var pl = this._places.getPlace();
         if (pl.geometry) {

@@ -28,6 +28,11 @@
 <link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
 <link rel="import" href="../bower_components/salte-rating/salte-rating.html">
 
+<link rel="import" href="../bower_components/l2t-paper-slider/l2t-paper-slider.html">
+<link rel="import" href="../bower_components/photo-gallery/photo-gallery.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+
+
 
 
 <dom-module id="my-search">
@@ -121,6 +126,15 @@
         height: 600px;
         width: 600px;
       }
+
+      paper-slide {
+        --paper-slide-width: 450px;
+        
+      }
+
+      p {width: 400px;
+        word-wrap: break-word; }
+   
     
     </style>
 <paper-input-place id='input' api-key="[[key]]" class="custom" 
@@ -139,7 +153,7 @@ label="Pick a place, any place" on-value-changed="wipeout" on-place-changed="cha
 <iron-list id="ironl" items="[[res]]" as="restaurant" >
     <template>
         <div id="card-holder">
-          <paper-card heading="[[restaurant.name]]" restaurant="[[restaurant]]" elevation="2" on-click="showroute">
+          <paper-card heading="[[restaurant.name]]" restaurant="[[restaurant]]" elevation="2" on-click="showrouteNmore">
             <div id="card-content" class="layout horizontal justified">
              <div class="layout horizontal justified">
                 <div class="card-detail"><b>Rating: <salte-rating icon="star" value=[[restaurant.rating]] disabled></b></salte-rating></div>
@@ -158,18 +172,45 @@ label="Pick a place, any place" on-value-changed="wipeout" on-place-changed="cha
  
   
   <paper-dialog id="route" autoFitOnAttach entry-animation="scale-up-animation" exit-animation="fade-out-animation">
-      <div class="buttons">
+      <h3 style="float: left">Map &amp; More</h3>      
+    <div class="buttons">         
          <iron-icon  dialog-confirm autofocus icon="icons:close">
         </iron-icon>
-        </div>
+    </div>
+  <div class="layout horizontal justified" style="width:1200px">            
       <google-map map="{{map}}" api-key="[[key]]"></google-map>
       <google-map-directions map="[[map]]"
       start-address="[[place.latLng]]" end-address="[[destination]]">
     </google-map-directions>
+      <div class="layout vertical wrap" style="width:550px">
+          <!-- <photo-gallery height='120'>                                
+      <div class='item' data-url='https://lh3.googleusercontent.com/p/AF1QipOOiGQgRhh_kozB2H6GcUtmwYsnbuvHOM3_bYTR=w902-k'></div>               
+                  <div class='item' data-url='[photourls.0]'></div>
+                  <div class='item' data-url='[photourls.1]'></div>               
+                  <div class='item' data-url='[photourls.2]'></div>               
+                  <div class='item' data-url='[photourls.3]'></div>               
+                  <div class='item' data-url='[photourls.4]'></div>    
+                  <h2>Hello [[pic0]]!</h2>
+                  
+          </photo-gallery> -->
+          <l2t-paper-slider auto-progress slide-duration="2" total-slides=[[reviews.length]]>
+              <template is="dom-repeat" items="[[photourls]]" as="photo">                            
+                  <iron-image src="[[photo]]"></iron-image>
+              </template>             
+           </l2t-paper-slider>
+          <label>Reviews of recent visitors:</label>
+          <l2t-paper-slider auto-progress slide-duration="2" total-slides=[[reviews.length]]>
+              <template is="dom-repeat" items="[[reviews]]" as="review">                            
+                  <paper-slide><p>"[[review.text]]"</p></paper-slide>
+              </template>             
+            </l2t-paper-slider>
+     </div>
 
-    
+  </div>
+
   </paper-dialog>
- 
+  <!-- <h2>Hello [[pic0]]!</h2> -->
+  
    
 <!-- <google-map latitude="37.77493" longitude="-122.41942" fit-to-markers apiKey="AIzaSyA1jZJXlG8oo8BU-jye32H61p68GcjUNyQ">
     <google-map-marker latitude="37.779" longitude="-122.3892"
@@ -209,7 +250,16 @@ label="Pick a place, any place" on-value-changed="wipeout" on-place-changed="cha
           type: String,
           notify: true
 
-        }
+        },
+        reviews: {
+          type: Array,
+          notify: true
+        },
+        photourls: {
+          type: Array,
+          notify: true
+        },
+        
 
 
         };
@@ -240,7 +290,7 @@ label="Pick a place, any place" on-value-changed="wipeout" on-place-changed="cha
     }
 
 
-    showroute(e){
+    showrouteNmore(e){
       //console.log(e.target.restaurant.geometry.location.lat());
       this.destination = {
          lat: e.target.restaurant.geometry.location.lat(),
@@ -248,9 +298,34 @@ label="Pick a place, any place" on-value-changed="wipeout" on-place-changed="cha
         };
 
         this.$.route.open();
+        var p = this.$.input.getDetail(e.target.restaurant.place_id);
+        //console.log(p);
+        p.then(response => {
 
-
-    }
+          this.reviews = response.reviews;
+          var arr = [];
+          //this.placephotos = response.photos;
+          // console.log(this.photos);
+          response.photos.forEach((element) => {
+         //  console.log(element.getUrl({'maxWidth': Math.floor(Math.random() * 800) + 400 }));
+          var url =  element.getUrl({'maxWidth': 280 });
+                //console.log(url);
+            arr.push(url); 
+          });
+          this.photourls = arr;
+          // this.pic0 = arr[0];
+          // this.pic1 = arr[1];
+          // this.pic2 = arr[2];
+          // this.pic3 = arr[3];
+          // this.pic4 = arr[4];
+            
+        });
+      
+          
+    
+      
+  }
+    
 
       /**
 
