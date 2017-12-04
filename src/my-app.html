@@ -107,7 +107,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <a name="home" href="[[rootPath]]home">Cheap Eats</a>
             <a name="search" href="[[rootPath]]search">Search</a>
             <a name="feed" href="[[rootPath]]feed">Feed</a>
-            <a name="login" href="[[rootPath]]login">Login</a>
           </iron-selector>
           <paper-progress value="10" indeterminate bottom-item></paper-progress>
         </app-toolbar>
@@ -121,7 +120,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <iron-pages
             selected="[[page]]"
             attr-for-selected="name"
-            fallback-selection="view1"
             role="main">
           <my-home name="home"></my-home>
           <my-search name="search" favorite="[[data]]"></my-search>
@@ -174,7 +172,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _routePageChanged(page) {
         // If no page was found in the route data, page will be an empty string.
         // Default to 'view1' in that case.
-        this.page = page || 'view1';
 
         // Close a non-persistent drawer when the page & route are changed.
         if (!this.$.drawer.persistent) {
