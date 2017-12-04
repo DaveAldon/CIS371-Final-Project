@@ -196,14 +196,9 @@
                 </div>
               </div>
               <div class="card-action">
-<<<<<<< Updated upstream
                 <paper-button raised restaurant="[[restaurant]]" on-tap="addfav">
                   Add Favorite
                   <!-- <iron-icon icon="icons:favorite" ></iron-icon> -->
-=======
-                <paper-button raised on-click="">
-                  <iron-icon icon="icons:favorite" restaurant="[[restaurant]]" on-tap="addfav"></iron-icon>
->>>>>>> Stashed changes
                 </paper-button>
               </div>
             </div>
@@ -306,11 +301,7 @@
           },
           favorite:{
             type: Object,
-<<<<<<< Updated upstream
             value: null,
-=======
-            value: [],
->>>>>>> Stashed changes
             notify: true            
           }
           
@@ -428,14 +419,9 @@
 
 
       addfav(e){
-<<<<<<< Updated upstream
         //var f = e.target.restaurant;
         this.set('favorite', e.target.restaurant)
         // console.log(this.favorite);
-=======
-        this.favorite = e.target.restaurant;
-        console.log(e.target)
->>>>>>> Stashed changes
       }
 
       /**
