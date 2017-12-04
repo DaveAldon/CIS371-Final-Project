@@ -33,7 +33,7 @@ David
       }
       paper-card {
         width: 100%;
-        background-color: lightblue;
+        background-color: white;
       }
       .card-content {
         margin-top: -10px;
@@ -58,7 +58,7 @@ David
         margin-left: 0px;
       }
       #cardinfo {
-        background-color: lightgreen;
+        background-color: RGB(106,204,171);
       }
       #private-feed, #public-feed {
         width: 50%;
@@ -136,7 +136,6 @@ David
         dbRef.ref('/public-feed/').push().set({
           name: ev.model.ord.name,
           address: ev.model.ord.address,
-          placeid: ev.model.ord.placeid
         });
       }
       add() {
@@ -148,11 +147,6 @@ David
           name: upname,
           address: upaddress
         });
-        /*
-        dbRef.ref('/public-feed/').push().set({
-          name: "arbys",
-        });
-        */
       }
     }
 
