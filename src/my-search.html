@@ -13,6 +13,7 @@
 <link rel="import" href="../bower_components/paper-input-place/paper-input-place.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-input-container.html">
 
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
@@ -34,7 +35,10 @@
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu-light.html">
-<link rel="import" href="my-login.html">
+
+<link rel="import" href="../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
 
 
 
@@ -137,7 +141,7 @@
       }
 
       google-map {
-        height: 600px;
+        height: 500px;
         width: 600px;
       }
 
@@ -150,12 +154,27 @@
       paper-listbox {
         width: 230px;
       }
-
+      paper-icon-button {
+      color: var(--paper-pink-500);
+      --paper-icon-button-ink-color: var(--paper-indigo-500);
+    }
+    paper-icon-button:hover {
+      background-color: var(--paper-pink-500);
+      color: white;
+    }
       p {
         width: 400px;
         word-wrap: break-word;
       }
     </style>
+
+    <firebase-app id="myFireApp" auth-domain="cheap-eats-72242.firebaseapp.com" database-url="https://cheap-eats-72242.firebaseio.com"
+      api-key="AIzaSyB_UNMUaAogW_KHDBniOQoE_GfitN36mgo">
+    </firebase-app>
+    <firebase-auth id="auth" user="{{user}}" provider="google" on-error="handleError">
+    </firebase-auth>
+    <firebase-query path="/private-feed/[[user.uid]]" data="{{privateData}}"></firebase-query>
+
     <paper-input-place id='input' api-key="[[key]]" class="custom" value="{{val}}" place="{{place}}" nearbyrestaurants="{{res}}"
       label="Pick a place, any place" on-value-changed="wipeout" on-place-changed="changed" hide-error></paper-input-place>
 
@@ -165,7 +184,7 @@
       <paper-dropdown-menu-light id="option" label="Result Order" on-selected-item-changed="changeorder" style="float: right; padding-right:100px;">
         <paper-listbox slot="dropdown-content" class="dropdown-content" selected="0">
           <paper-item>High Rating with Low Price</paper-item>
-          <paper-item>Low Rating with Low Price</paper-item>         
+          <paper-item>Low Rating with Low Price</paper-item>
           <paper-item>High Rating with High Price</paper-item>
           <paper-item>Low Rating with High Price</paper-item>
         </paper-listbox>
@@ -196,10 +215,13 @@
                 </div>
               </div>
               <div class="card-action">
-                <paper-button raised restaurant="[[restaurant]]" on-tap="addfav">
+                  <paper-icon-button icon="icons:favorite" restaurant="[[restaurant]]" on-tap="addfav"></paper-icon-button>
+                  
+
+                <!-- <paper-button raised restaurant="[[restaurant]]" on-tap="addfav">
                   Add Favorite
-                  <!-- <iron-icon icon="icons:favorite" ></iron-icon> -->
-                </paper-button>
+                  <iron-icon icon="icons:favorite" ></iron-icon>
+                </paper-button> -->
               </div>
             </div>
           </paper-card>
@@ -299,12 +321,12 @@
             type: Array,
             notify: true
           },
-          favorite:{
+          favorite: {
             type: Object,
             value: null,
-            notify: true            
+            notify: true
           }
-          
+
 
 
 
@@ -353,7 +375,7 @@
               }
               return y.rating - x.rating;
             }
-              break;
+            break;
           case 'High Rating with High Price':
             this.$.input.nearbyrestaurants.sort(function (x, y) {
               var n = y.price_level - x.price_level;
@@ -365,11 +387,11 @@
             });
             break;
 
-        // }
+          // }
+
+        }
 
       }
-
-    }
 
 
 
@@ -411,17 +433,25 @@
           // this.pic4 = arr[4];
 
         });
-
-
-
-
       }
 
 
-      addfav(e){
+
+
+      addfav(e) {
+        var uid = this.$.auth.user.uid;
+        var dbRef = this.$.myFireApp.app.database();
+        console.log( e.target.restaurant.international_phone_number);
+        var opt = {};
+        opt.name = e.target.restaurant.name;
+        opt.address = e.target.restaurant.formatted_address;
+        opt.placeid = e.target.restaurant.place_id;
+
+        dbRef.ref('/private-feed/' + uid ).push(opt);
+
         //var f = e.target.restaurant;
-        this.set('favorite', e.target.restaurant)
-        // console.log(this.favorite);
+        //this.set('favorite', e.target.restaurant)
+        // console.log(e.target.restaurant);
       }
 
       /**
