@@ -105,7 +105,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-toolbar>
           <iron-selector selected="[[page]]" attr-for-selected="name" class="menu-bar" role="navigation">
             <a name="home" href="[[rootPath]]home">Cheap Eats</a>
+            <iron-icon icon="icons:arrow-forward"></iron-icon>
+            <a name="login" href="[[rootPath]]login">Login</a>
+            <iron-icon icon="icons:arrow-forward"></iron-icon>
             <a name="search" href="[[rootPath]]search">Search</a>
+            <iron-icon icon="icons:arrow-forward"></iron-icon>
             <a name="feed" href="[[rootPath]]feed">Feed</a>
           </iron-selector>
           <paper-progress value="10" indeterminate bottom-item></paper-progress>
@@ -120,11 +124,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <iron-pages
             selected="[[page]]"
             attr-for-selected="name"
+            fallback-selection="view404"
             role="main">
           <my-home name="home"></my-home>
           <my-search name="search" favorite="[[data]]"></my-search>
           <my-feed name="feed"></my-feed>
           <my-login name="login" favorite="[[data]]"></my-login>
+          <my-login name="login"></my-login>
+          <my-search name="search"></my-search>
+          <my-feed name="feed"></my-feed>
           <my-view404 name="view404"></my-view404>
         </iron-pages>
       </app-header-layout>
@@ -172,6 +180,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _routePageChanged(page) {
         // If no page was found in the route data, page will be an empty string.
         // Default to 'view1' in that case.
+        this.page = page || 'home';
 
         // Close a non-persistent drawer when the page & route are changed.
         if (!this.$.drawer.persistent) {
