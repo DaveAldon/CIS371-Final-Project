@@ -39,6 +39,8 @@
 <link rel="import" href="../bower_components/polymerfire/firebase-app.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../bower_components/paper-alert-dialog/paper-alert-dialog.html">
+<link rel="import" href="../bower_components/paper-alert-dialog/paper-alert-dialog-icon-header.html">
 
 
 
@@ -281,8 +283,11 @@
       </div>
 
     </paper-dialog>
-    <h2>Hello [[favorite]]!</h2>
-
+    <!-- <h2>Hello [[favorite]]!</h2> -->
+    <paper-alert-dialog id="dialog" confirm-button="Got it">
+        <paper-alert-dialog-icon-header icon="icons:close">No Login Account!</paper-alert-dialog-icon-header>
+        Please login first!
+      </paper-alert-dialog>
 
     <!-- <google-map latitude="37.77493" longitude="-122.41942" fit-to-markers apiKey="AIzaSyA1jZJXlG8oo8BU-jye32H61p68GcjUNyQ">
     <google-map-marker latitude="37.779" longitude="-122.3892"
@@ -449,19 +454,24 @@
 
 
       addfav(e) {
-        var uid = this.$.auth.user.uid;
+        var user = this.$.auth.user;
         var dbRef = this.$.myFireApp.app.database();
-        console.log( uid);
-        // var opt = {};
-        // opt.name = e.target.restaurant.name;
-        // opt.address = e.target.restaurant.formatted_address;
-        // opt.placeid = e.target.restaurant.place_id;
+       // console.log( this.$.auth.user.uid);
+        if( user !== null){
+        var opt = {};
+        opt.name = e.target.restaurant.name;
+        opt.address = e.target.restaurant.formatted_address;
+        opt.placeid = e.target.restaurant.place_id;
 
-        // dbRef.ref('/private-feed/' + uid ).push(opt);
+        dbRef.ref('/private-feed/' + user.uid ).push(opt);
 
         //var f = e.target.restaurant;
         //this.set('favorite', e.target.restaurant)
         // console.log(e.target.restaurant);
+        }
+        else{
+            this.$.dialog.open();
+        }
       }
 
       /**

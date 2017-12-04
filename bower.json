@@ -27,7 +27,8 @@
     "photo-gallery": "supachailllpay/photo-gallery#^2.0.4",
     "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^2.0.0",
     "paper-item": "PolymerElements/paper-item#^2.0.0",
-    "paper-listbox": "PolymerElements/paper-listbox#^2.0.0"
+    "paper-listbox": "PolymerElements/paper-listbox#^2.0.0",
+    "paper-alert-dialog": "Collaborne/paper-alert-dialog#^2.0.1"
   },
   "resolutions": {
     "polymer": "^2.0.0"
