@@ -154,12 +154,20 @@
       paper-listbox {
         width: 230px;
       }
-      paper-icon-button {
+      paper-icon-button.pink {
       color: var(--paper-pink-500);
       --paper-icon-button-ink-color: var(--paper-indigo-500);
     }
-    paper-icon-button:hover {
+    paper-icon-button.pink:hover {
       background-color: var(--paper-pink-500);
+      color: white;
+    }
+    paper-icon-button.explore {
+      color: var(--paper-blue-500);
+      --paper-icon-button-ink-color: var(--paper-indigo-500);
+    }
+    paper-icon-button.explore:hover {
+      background-color: var(--paper-blue-500);
       color: white;
     }
       p {
@@ -198,24 +206,26 @@
     <iron-list id="ironl" items="[[res]]" as="restaurant">
       <template>
         <div id="card-holder">
-          <paper-card heading="[[restaurant.name]]" restaurant="[[restaurant]]" elevation="2" on-click="showrouteNmore">
+          <paper-card heading="[[restaurant.name]]">
             <div id="card-content" class="layout horizontal justified">
+
               <div class="layout horizontal justified">
                 <div class="card-detail">
                   <b>Rating:
-                    <salte-rating icon="star" value=[[restaurant.rating]] disabled>
-                  </b>
-                  </salte-rating>
+                    <salte-rating icon="star" value=[[restaurant.rating]] disabled>  </salte-rating>
+                  </b>                
                 </div>
                 <div class="card-detail">
                   <b>PriceLevel:
                     <salte-rating icon="icons:editor:attach-money" value=[[restaurant.price_level]] disabled></salte-rating>
                   </b>
-                  </salte-rating>
                 </div>
-              </div>
+                 </div>
+
+              <paper-icon-button icon="icons:explore" restaurant="[[restaurant]]" elevation="2" on-click="showrouteNmore" class="explore"></paper-icon-button>
+                 
               <div class="card-action">
-                  <paper-icon-button icon="icons:favorite" restaurant="[[restaurant]]" on-tap="addfav"></paper-icon-button>
+                  <paper-icon-button icon="icons:favorite" restaurant="[[restaurant]]" on-tap="addfav" class="pink"></paper-icon-button>
                   
 
                 <!-- <paper-button raised restaurant="[[restaurant]]" on-tap="addfav">
@@ -441,13 +451,13 @@
       addfav(e) {
         var uid = this.$.auth.user.uid;
         var dbRef = this.$.myFireApp.app.database();
-        console.log( e.target.restaurant.international_phone_number);
-        var opt = {};
-        opt.name = e.target.restaurant.name;
-        opt.address = e.target.restaurant.formatted_address;
-        opt.placeid = e.target.restaurant.place_id;
+        console.log( uid);
+        // var opt = {};
+        // opt.name = e.target.restaurant.name;
+        // opt.address = e.target.restaurant.formatted_address;
+        // opt.placeid = e.target.restaurant.place_id;
 
-        dbRef.ref('/private-feed/' + uid ).push(opt);
+        // dbRef.ref('/private-feed/' + uid ).push(opt);
 
         //var f = e.target.restaurant;
         //this.set('favorite', e.target.restaurant)
