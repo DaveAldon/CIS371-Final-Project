@@ -1,3 +1,7 @@
+<!--
+Chit
+-->
+
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 
 <link rel="import" href="../bower_components/polymer/lib/elements/dom-bind.html">
@@ -215,7 +219,7 @@
                 <div class="card-detail">
                   <b>Rating:
                     <salte-rating icon="star" value=[[restaurant.rating]] disabled>  </salte-rating>
-                  </b>                
+                  </b>
                 </div>
                 <div class="card-detail">
                   <b>PriceLevel:
@@ -225,10 +229,10 @@
                  </div>
 
               <paper-icon-button icon="icons:explore" restaurant="[[restaurant]]" elevation="2" on-click="showrouteNmore" class="explore"></paper-icon-button>
-                 
+
               <div class="card-action">
                   <paper-icon-button icon="icons:favorite" restaurant="[[restaurant]]" on-tap="addfav" class="pink"></paper-icon-button>
-                  
+
 
                 <!-- <paper-button raised restaurant="[[restaurant]]" on-tap="addfav">
                   Add Favorite
@@ -255,15 +259,15 @@
         <google-map-directions map="[[map]]" start-address="[[place.latLng]]" end-address="[[destination]]">
         </google-map-directions>
         <div class="layout vertical wrap" style="width:550px">
-          <!-- <photo-gallery height='120'>                                
-      <div class='item' data-url='https://lh3.googleusercontent.com/p/AF1QipOOiGQgRhh_kozB2H6GcUtmwYsnbuvHOM3_bYTR=w902-k'></div>               
+          <!-- <photo-gallery height='120'>
+      <div class='item' data-url='https://lh3.googleusercontent.com/p/AF1QipOOiGQgRhh_kozB2H6GcUtmwYsnbuvHOM3_bYTR=w902-k'></div>
                   <div class='item' data-url='[photourls.0]'></div>
-                  <div class='item' data-url='[photourls.1]'></div>               
-                  <div class='item' data-url='[photourls.2]'></div>               
-                  <div class='item' data-url='[photourls.3]'></div>               
-                  <div class='item' data-url='[photourls.4]'></div>    
+                  <div class='item' data-url='[photourls.1]'></div>
+                  <div class='item' data-url='[photourls.2]'></div>
+                  <div class='item' data-url='[photourls.3]'></div>
+                  <div class='item' data-url='[photourls.4]'></div>
                   <h2>Hello [[pic0]]!</h2>
-                  
+
           </photo-gallery> -->
           <l2t-paper-slider auto-progress slide-duration="2" total-slides=[[reviews.length]]>
             <template is="dom-repeat" items="[[photourls]]" as="photo">
@@ -370,7 +374,7 @@
           //                                     }
 
           //                                     return y.rating - x.rating;
-          //                                 }); 
+          //                                 });
 
           //  console.log(this.$.option.value);
         }
