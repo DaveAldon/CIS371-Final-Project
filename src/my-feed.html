@@ -16,7 +16,7 @@
     <firebase-auth id="auth" user="{{user}}" provider="google" on-error="handleError">
     </firebase-auth>
     <firebase-query path="/private-feed/[[user.uid]]" data="{{privateData}}"></firebase-query>
-    <firebase-query path="/public-feed" data="{{publicData}}"></firebase-query>
+    <firebase-query path="/public-feed" limit-to-last= "10" data="{{publicData}}"></firebase-query>
     <style include="shared-styles">
       :host {
         display: block;

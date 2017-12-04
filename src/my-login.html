@@ -48,24 +48,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     	return {
     		user: {
     			type: Object
-    		}
-    		,
-    	favorite: {
-    		type: Object,
-    		notify: true,
-    		observer: '_favchanged'
-    	},
-    	_favchanged: function(e){
-    	var dbRef = this.$.myFireApp.app.database();
-    	dbRef.ref('favorite').push().set(e.target.restaurant);
-
-    }
-
-    }
+    		},
+      	favorite: {
+      		type: Object,
+      		notify: true,
+      		observer: '_favchanged'
+      	},
+      	_favchanged: function(e){
+      	   var dbRef = this.$.myFireApp.app.database();
+      	    dbRef.ref('favorite').push().set(e.target.restaurant);
+        }
+      }
     };
 	}
-    
-
     window.customElements.define(MyLogin.is, MyLogin);
   </script>
 </dom-module>
@@ -92,10 +87,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         });
       },
-       logout: function(eeee) {
-        var displayObj = this.$.loginStatus;
-        firebase.auth().signOut();
-      }
+     logout: function(eeee) {
+      var displayObj = this.$.loginStatus;
+      firebase.auth().signOut();
+     }
     });
   </script>
 </dom-module>
