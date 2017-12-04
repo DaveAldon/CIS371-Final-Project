@@ -47,9 +47,15 @@ David
       }
       #delitembtn {
         background-color: salmon;
-        width: 100%;
+        width: 48%;
         float: right;
-        margin-left: 5px;
+        margin-left: 0px;
+      }
+      #promotebtn {
+        background-color: RGB(106,204,171);
+        width: 48%;
+        float: left;
+        margin-left: 0px;
       }
       #cardinfo {
         background-color: lightgreen;
@@ -70,12 +76,6 @@ David
             <div class="layout vertical">
               <div class="card-content"><h3>Name: [[ord.name]]</h3>
               <h3>Address: [[ord.address]]</h3></div>
-            </div>
-            <div class="card-actions">
-              <paper-button id="delitembtn" on-click="toggledelPub">
-                <iron-icon icon="icons:delete"></iron-icon>
-              Remove</paper-button>
-              </div>
             </div>
           </paper-card>
           </div>
@@ -100,6 +100,9 @@ David
                 <h3>Address: [[ord.address]]</h3></div>
               </div>
               <div class="card-actions">
+                <paper-button id="promotebtn" on-click="promote">
+                  <iron-icon icon="icons:favorite"></iron-icon>
+                Make Public!</paper-button>
                 <paper-button id="delitembtn" on-click="toggledelPriv">
                   <iron-icon icon="icons:delete"></iron-icon>
                 Remove</paper-button>
@@ -127,13 +130,13 @@ David
           placeid: null
         });
       }
-      toggledelPub(ev) {
+      promote(ev) {
         var uid = this.$.auth.user.uid
         var dbRef = this.$.myFireApp.app.database();
-        dbRef.ref('/public-feed/' + ev.model.ord.$key + '/').update({
-          name: null,
-          address: null,
-          placeid: null
+        dbRef.ref('/public-feed/').push().set({
+          name: ev.model.ord.name,
+          address: ev.model.ord.address,
+          placeid: ev.model.ord.placeid
         });
       }
       add() {
