@@ -124,13 +124,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             fallback-selection="view1"
             role="main">
           <my-home name="home"></my-home>
-          <my-search name="search"></my-search>
+          <my-search name="search" favorite="[[data]]"></my-search>
           <my-feed name="feed"></my-feed>
-          <my-login name="login"></my-login>
+          <my-login name="login" favorite="[[data]]"></my-login>
           <my-view404 name="view404"></my-view404>
         </iron-pages>
       </app-header-layout>
     </app-drawer-layout>
+
   </template>
 
   <script>
@@ -149,12 +150,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           // This shouldn't be neccessary, but the Analyzer isn't picking up
           // Polymer.Element#rootPath
           rootPath: String,
+          data: {
+            type: Object,
+            notify: true,
+            observer: "_showit"
+
+          },
+
         };
+      }
+
+      _showit(e){
+
+        console.log(e);
       }
 
       static get observers() {
         return [
-          '_routePageChanged(routeData.page)',
+          '_routePageChanged(routeData.page)'
         ];
       }
 

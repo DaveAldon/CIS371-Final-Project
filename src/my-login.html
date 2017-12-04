@@ -11,6 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-app.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="shared-styles.html">
@@ -23,6 +24,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         padding: 10px;
       }
+       paper-button {
+        --paper-button-ink-color: purple;
+        background-color: var(--paper-indigo-500);
+        color: white;
+      }
+
     </style>
     <firebase-app id="myFireApp" auth-domain="cheap-eats-72242.firebaseapp.com"
       database-url="https://cheap-eats-72242.firebaseio.com"
@@ -30,13 +37,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </firebase-app>
     <firebase-auth id="auth" user="{{user}}" provider="google" on-error="handleError">
     </firebase-auth>
+    <firebase-query id="query" path="/private-feed/[[user.uid]]"></firebase-query>
     <auth-login></auth-login>
   </template>
 
   <script>
     class MyLogin extends Polymer.Element {
       static get is() { return 'my-login'; }
+    static get properties() {
+    	return {
+    		user: {
+    			type: Object
+    		}
+    		,
+    	favorite: {
+    		type: Object,
+    		notify: true,
+    		observer: '_favchanged'
+    	},
+    	_favchanged: function(e){
+    	var dbRef = this.$.myFireApp.app.database();
+    	dbRef.ref('favorite').push().set(e.target.restaurant);
+
     }
+
+    }
+    };
+	}
+    
+
     window.customElements.define(MyLogin.is, MyLogin);
   </script>
 </dom-module>
@@ -44,8 +73,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="auth-login">
   <template>
     <h2 id="loginStatus">No user signed in.</h2>
-    <paper-button raisedButton id="test" on-tap="login">Log in with Google Account</paper-button>
-    <paper-button raisedButton id="btnLogout" on-tap="logout">Log Out</paper-button>
+    <paper-button raised id="test" on-tap="login">Log in with Google Account</paper-button>
+    <paper-button raised id="btnLogout" on-tap="logout">Log Out</paper-button>
   </template>
 
   <script>
