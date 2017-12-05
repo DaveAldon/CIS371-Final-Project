@@ -10,6 +10,8 @@ David
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-alert-dialog/paper-alert-dialog.html">
+<link rel="import" href="../bower_components/paper-alert-dialog/paper-alert-dialog-icon-header.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="my-feed">
@@ -17,7 +19,7 @@ David
 <!--     <firebase-app id="myFireApp" auth-domain="cheap-eats-72242.firebaseapp.com"
       database-url="https://cheap-eats-72242.firebaseio.com"
       api-key="AIzaSyB_UNMUaAogW_KHDBniOQoE_GfitN36mgo">
-    </firebase-app> -->    
+    </firebase-app> -->
     <firebase-auth id="auth" user="{{user}}" provider="google" on-error="handleError">
     </firebase-auth>
     <firebase-query id="fireQry" path="/private-feed/[[user.uid]]" data="{{privateData}}"></firebase-query>
@@ -85,11 +87,12 @@ David
 
     <div id="private-feed">
       <h2>Private Feed</h2>
-      <paper-input label="Restaurant Name" id="inname"></paper-input>
-      <paper-input label="Address" id="inaddress"></paper-input>
+      <paper-input required auto-validate error-message="needs some text!" label="Restaurant Name" id="inname"></paper-input>
+      <paper-input required auto-validate error-message="needs some text!" label="Address" id="inaddress"></paper-input>
       <paper-button on-click="add">
         <iron-icon icon="icons:favorite"></iron-icon>
       Add Your Own</paper-button>
+
       <iron-list items="[[privateData]]" as="ord">
         <template>
          <div id="card-holder">
@@ -113,6 +116,15 @@ David
         </template>
       </iron-list>
     </div>
+
+    <paper-alert-dialog id="dialog" confirm-button="Got it">
+      <paper-alert-dialog-icon-header icon="icons:close">No Login Account!</paper-alert-dialog-icon-header>
+      Please login first to add a favorite!
+    </paper-alert-dialog>
+    <paper-alert-dialog id="indialog" confirm-button="Got it">
+      <paper-alert-dialog-icon-header icon="icons:close">Missing Input!</paper-alert-dialog-icon-header>
+      Please fill the two fields first!
+    </paper-alert-dialog>
   </template>
 
   <script>
@@ -121,6 +133,8 @@ David
       ready() {
         super.ready();
       }
+
+      // Remove private record from firebase
       toggledelPriv(ev) {
         var uid = this.$.auth.user.uid
         var dbRef = this.$.fireQry.app.database();
@@ -130,6 +144,8 @@ David
           placeid: null
         });
       }
+
+      //Send private data to public feed
       promote(ev) {
         var uid = this.$.auth.user.uid
         var dbRef = this.$.fireQry.app.database();
@@ -138,15 +154,26 @@ David
           address: ev.model.ord.address,
         });
       }
+
+      // User can input their own data to private feed
       add() {
-        var uid = this.$.auth.user.uid
-        var dbRef = this.$.fireQry.app.database();
-        var upname = this.$.inname.value;
-        var upaddress = this.$.inaddress.value;
-        dbRef.ref('/private-feed/' + uid).push().set({
-          name: upname,
-          address: upaddress
-        });
+        if((!this.$.inname.validate()) || (!this.$.inaddress.validate())) {
+          return;
+        }
+        var user = this.$.auth.user;
+        try {
+          var uid = user.uid;
+          var dbRef = this.$.fireQry.app.database();
+          var upname = this.$.inname.value;
+          var upaddress = this.$.inaddress.value;
+          dbRef.ref('/private-feed/' + uid).push().set({
+            name: upname,
+            address: upaddress
+          });
+        }
+        catch (ex){
+          this.$.dialog.open();
+        }
       }
     }
 
