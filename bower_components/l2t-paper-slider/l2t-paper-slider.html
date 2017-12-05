@@ -123,21 +123,22 @@ Custom property | Description | Default
       }
       .slider {
         width: var(--paper-slide-width, 100%);
-        height: var(--paper-slide-height, 600px);
+        height: var(--paper-slide-height, 500px);
       }
       .slider__slides ::slotted(*) {
         font-size: medium;
       }
       .slider__slides ::slotted(paper-slide) {
         width: var(--paper-slide-width, 100%);
-        height: var(--paper-slide-height, 600px);
+        height: var(--paper-slide-height, 500px);
         overflow-x: hidden;
         display: inline-block;
       }
+     
     </style>
     <div id="container" class="slider" data-pos$="[[position]]">
       <div class="slider__slides mouseup">
-        <slot></slot>
+        <slot id="text"></slot>
       </div>
       <div role="menubar" hidden$="[[hideNav]]" class="slider__dots">
         <span class="slider__indicator"></span>

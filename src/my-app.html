@@ -31,7 +31,7 @@ David
   <template>
     <style>
       :host {
-        --app-primary-color: RGB(106,204,171);
+        --app-primary-color: RGB(106, 204, 171);
         --app-secondary-color: black;
 
         display: block;
@@ -78,27 +78,23 @@ David
         margin-left: auto;
         margin-right: auto;
       }
+
       #footer {
         position: fixed;
         bottom: 0;
         width: 100%;
-        background-color: RGB(106,204,171);
+        background-color: RGB(106, 204, 171);
         color: white;
         text-align: center;
       }
-
     </style>
-
-    <app-location
-        route="{{route}}"
-        url-space-regex="^[[rootPath]]">
+    <firebase-app id="myFireApp" auth-domain="cheap-eats-72242.firebaseapp.com" database-url="https://cheap-eats-72242.firebaseio.com"
+      api-key="AIzaSyB_UNMUaAogW_KHDBniOQoE_GfitN36mgo">
+    </firebase-app>
+    <app-location route="{{route}}" url-space-regex="^[[rootPath]]">
     </app-location>
 
-    <app-route
-        route="{{route}}"
-        pattern="[[rootPath]]:page"
-        data="{{routeData}}"
-        tail="{{subroute}}">
+    <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}">
     </app-route>
 
     <app-drawer-layout fullbleed narrow="{{narrow}}">
@@ -123,11 +119,7 @@ David
 
       <!-- Main content -->
       <app-header-layout has-scrolling-region>
-        <iron-pages
-            selected="[[page]]"
-            attr-for-selected="name"
-            fallback-selection="view404"
-            role="main">
+        <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
           <my-home name="home"></my-home>
           <my-search name="search"></my-search>
           <my-feed name="feed"></my-feed>
@@ -167,7 +159,7 @@ David
         };
       }
 
-      _showit(e){
+      _showit(e) {
         console.log(e);
       }
 
@@ -192,10 +184,10 @@ David
         // Load page import on demand. Show 404 page if fails
         var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
         Polymer.importHref(
-            resolvedPageUrl,
-            null,
-            this._showPage404.bind(this),
-            true);
+          resolvedPageUrl,
+          null,
+          this._showPage404.bind(this),
+          true);
       }
 
       _showPage404() {

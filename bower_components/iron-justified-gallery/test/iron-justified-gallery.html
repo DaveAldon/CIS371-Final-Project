@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+	<head>
+		<title>paper-collapse-item</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+		<script src="../../web-component-tester/browser.js"></script>
+		<script src="../../test-fixture/test-fixture-mocha.js"></script>
+
+		<link rel="import" href="../../test-fixture/test-fixture.html">
+		<link rel="import" href="../iron-justified-gallery.html">
+	</head>
+	<body>
+
+		<test-fixture id="TrivialElement">
+			<template>
+				<iron-justified-gallery></iron-justified-gallery>
+			</template>
+		</test-fixture>
+
+		<script>
+			suite('<iron-justified-gallery>', function() {
+				suite('vector computation behavior', function() {
+					var let;
+
+					setup(function() {
+						element = fixture('TrivialElement');
+					});
+
+					test('returns aspect ratios if heights and widths are available', function() {
+						const images = [
+							{ "width":  500, "height": 1000, "url": "image1.jpg" },
+							{ "width":  500, "height":  300, "url": "image2.jpg" },
+							{ "width": 1000, "height":  500, "url": "image3.jpg" },
+							{ "width":  700, "height":  500, "url": "image4.jpg" },
+							{ "width":  500, "height":  200, "url": "image5.jpg" }
+						];
+						expect(element._computeArrayOfRelativeBoxSizes(images)).to.be.eql([0.5, 1.6666666666666667, 2, 1.4, 2.5]);
+					});
+
+					test('normalizes widths if no heights are provided', function() {
+						const images = [
+							{ "width":  500, "url": "image1.jpg" },
+							{ "width":  500, "url": "image2.jpg" },
+							{ "width": 1000, "url": "image3.jpg" },
+							{ "width":  700, "url": "image4.jpg" },
+							{ "width":  500, "url": "image5.jpg" },
+						];
+						expect(element._computeArrayOfRelativeBoxSizes(images)).to.be.eql([1, 1, 2, 1.4, 1]);
+					});
+
+					test('returns vector with ones if no height/widths are provided', function() {
+						const images = [
+							{ "url": "image1.jpg" },
+							{ "url": "image2.jpg" },
+							{ "url": "image3.jpg" },
+						];
+						expect(element._computeArrayOfRelativeBoxSizes(images)).to.be.eql([1, 1, 1]);
+					});
+
+					test('return empty vectors if there are no pictures', function() {
+						expect(element._computeArrayOfRelativeBoxSizes([])).to.be.eql([]);
+					});
+				});
+			});
+		</script>
+
+	</body>
+</html>

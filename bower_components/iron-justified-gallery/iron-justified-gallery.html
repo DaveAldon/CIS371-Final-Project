@@ -1,0 +1,201 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+
+<script type="text/javascript" src="../justified-layout/index.js"></script>
+
+<!--
+A gallery for images using flickr justified-layout.
+
+### Example
+
+```html
+<iron-justified-gallery images="[[array]]" gallery-width="500" row-height="220">
+</iron-justified-gallery>
+```
+
+@demo demo/index.html
+-->
+<dom-module id="iron-justified-gallery">
+
+	<template>
+
+		<style>
+			:host {
+				position: relative;
+				display: block;
+			}
+		</style>
+
+		<div id="html" on-tap="_onTap"></div>
+
+	</template>
+
+	<script>
+
+		const justifiedLayout = require('justified-layout');
+
+		class IronJustifiedGallery extends
+				Polymer.mixinBehaviors([Polymer.IronResizableBehavior],
+				Polymer.GestureEventListeners(
+				Polymer.Element)) {
+
+			static get is() {
+				return 'iron-justified-gallery';
+			}
+
+			static get properties() {
+				return {
+					/**
+					* Input of images for the galery
+					*/
+					images: {
+						type: Array,
+						observer: '_redraw',
+						value: [],
+					},
+
+					/**
+					* Width of the whole gallery
+					* This value defaults to the width of the element.
+					*/
+					galleryWidth: Number,
+
+					/**
+					* Height of a single row in the gallery
+					*/
+					rowHeight: {
+						type: Number,
+						value: 200,
+					},
+
+					/**
+					 * Padding around the gallery container
+					 */
+					containerPadding: {
+						type: Number,
+						value: 10,
+					},
+				};
+			}
+
+			ready() {
+				super.ready();
+
+				/**
+				* Everytime a width dimension of the gallery space changes,
+				* the gallery needs to be recalculated.
+				* Function is called every-time the window resizes (and once at the page load,
+				* more details: https://elements.polymer-project.org/elements/iron-resizable-behavior?active=Polymer.IronResizableBehavior)
+				*/
+				this.addEventListener('iron-resize', e => this._redraw());
+			}
+
+			/**
+			* Generates the elements that are going to hold the images with the right positioning and dimensions.
+			* Attaches the elements to the DOM.
+			*
+			* @param images is the array of images that will be rendered
+			* @param galleryWidth the desired width of the gallery (if not set
+			* 				this defaults to maximal available space for the element)
+			* @param rowHeight the height of a single row. Either set or defaults
+			*				to 200px.
+			* @param containerPadding the padding around the cntainer
+			*/
+			_renderImages(images, galleryWidth, rowHeight, containerPadding) {
+				if (!images || images.length === 0) {
+					// Ignore initial calls
+					return;
+				}
+
+				const galleryParameters = {
+					containerWidth: galleryWidth || this.offsetWidth,
+					targetRowHeight: rowHeight,
+					containerPadding,
+				};
+
+				// extract image widths
+				const normalizedVector = this._computeArrayOfRelativeBoxSizes(images);
+				const geometry = justifiedLayout(normalizedVector, galleryParameters);
+
+				let elementsToBeAttached = '';
+				for (let i = 0; i < images.length; i++) {
+					const url = images[i].url;
+					const box = geometry.boxes[i];
+					elementsToBeAttached += `<div index="${i}" style="cursor: pointer; background-size: cover; background-position: center center; background-image: url(${url}); width: ${box.width}px; height: ${box.height}px; top: ${box.top}px; left: ${box.left}px; position: absolute;">`;
+					// if there is an icon attached set it in the middle of the image
+					if (images[i].icon) {
+						elementsToBeAttached += `<iron-icon icon="${images[i].icon}" style="width: 64px; height: 64px; color: white; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"></iron-icon>`;
+					}
+					elementsToBeAttached += `</div>`;
+				}
+
+				// attach the elements and set the dimensions of the gallery
+				this.$.html.innerHTML = elementsToBeAttached;
+				this.$.html.style.height = geometry.containerHeight + "px";
+			}
+
+			/**
+			* Function re-renders images if the input has changed
+			*/
+			_redraw() {
+				// Avoid race condition on initial load: the data might be set
+				// before the width of the element is known
+				setTimeout(() => this._renderImages(this.images, this.galleryWidth, this.rowHeight, this.containerPadding), 1);
+			}
+
+			/**
+			* Handles the tap on an image.
+			*
+			* @fires 'tap-image' with an image that was tapped as a detail
+			*/
+			_onTap(e) {
+				// if the icon was tapped return the parent element
+				const box = e.target.nodeName === 'IRON-ICON' ? e.target.parentElement : e.target;
+				// find the index of the image that was tapped
+				const indexOfTappedImage = box.getAttribute('index');
+				if (indexOfTappedImage) {
+					this.fire('tap-image', this.images[indexOfTappedImage]);
+				}
+			}
+
+			/**
+			* Computes the array of box sizes for all attached images. The
+			* vector is build from image ratios (width:height) if both values are provided.
+			* If height is missing the vector is build from widths normalized by
+			* minimum of all width-values. If both widths and heights are missing the
+			* result will be an array of ones.
+			*
+			* For more information about the purpose of this function see:
+			* https://github.com/flickr/justified-layout
+			*
+			* @param images array of all images provided by user
+			* @return array of box sizes computed from images
+			*/
+			_computeArrayOfRelativeBoxSizes(images) {
+				// Check if all object instances of an array have width/height parameters
+				const allImagesHaveWidthts = images.every(image => Boolean(image.width));
+				const allImagesHaveHeights = images.every(image => Boolean(image.height));
+
+				if (allImagesHaveHeights && allImagesHaveHeights) {
+					// Calculate aspect ratio if width & height are available for all images
+					return images.map(image => image.width / image.height)
+				} else if (allImagesHaveWidthts) {
+					// Normalize width if all widths are available
+					const widths = images.map(image => image.width);
+					const minWidth = Math.min.apply(Math, widths);
+					return widths.map(width => width / minWidth);
+				} else {
+					// Default to same measure if neither widths nor heights are present
+					return new Array(images.length).fill(1);
+				}
+			}
+
+		}
+		customElements.define(IronJustifiedGallery.is, IronJustifiedGallery);
+
+	</script>
+
+</dom-module>
+

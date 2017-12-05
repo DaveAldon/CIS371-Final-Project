@@ -1,0 +1,36 @@
+{
+  "name": "iron-justified-gallery",
+  "version": "2.2.0",
+  "description": "Polymer element that shows a pretty formatted gallery (using the Flickr justified-layout library)",
+  "keywords": [
+    "gallery",
+    "polymer"
+  ],
+  "files": [
+    "iron-justified-gallery.html"
+  ],
+  "scripts": {
+    "postinstall": "bower install",
+    "pretest": "polylint --no-recursion",
+    "test": "wct"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Collaborne/iron-justified-gallery.git"
+  },
+  "author": "Collaborne <opensource@collaborne.com>",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "justified-layout": "^2.1.0"
+  },
+  "devDependencies": {
+    "bower": "^1.7.7",
+    "gulp": "^3.9.0",
+    "gulp-debug": "^3.1.0",
+    "gulp-ignore": "^2.0.1",
+    "merge-stream": "^1.0.0",
+    "polylint": "^2.9.0",
+    "wct-local": "^2.0.12",
+    "web-component-tester": "^6.0.0"
+  }
+}

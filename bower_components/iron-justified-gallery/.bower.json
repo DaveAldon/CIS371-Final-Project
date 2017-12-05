@@ -1,0 +1,44 @@
+{
+  "name": "iron-justified-gallery",
+  "authors": [
+    "collaborne"
+  ],
+  "description": "A gallery for pictures using flickr justified-layout. (Polymer)",
+  "main": "iron-justified-gallery.html",
+  "keywords": [
+    "web-components",
+    "polymer",
+    "iron",
+    "material design",
+    "gallery",
+    "pictures"
+  ],
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/Collaborne/iron-justified-gallery",
+  "ignore": [
+    "**/.*"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^2.0.0",
+    "iron-icon": "PolymerElements/iron-icon#^2.0.0",
+    "iron-icons": "PolymerElements/iron-icons#^2.0.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^2.0.0",
+    "web-component-tester": "*",
+    "iron-demo-helpers": "^2.0.0",
+    "iron-resizable-behavior": "PolymerElements/iron-resizable-behavior#^2.0.0",
+    "justified-layout": "./node_modules/justified-layout/dist/justified-layout.js"
+  },
+  "version": "2.2.0",
+  "_release": "2.2.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.2.0",
+    "commit": "0ff198351f3d8f0c0f7f9636f5e56d9b418c805b"
+  },
+  "_source": "https://github.com/Collaborne/iron-justified-gallery.git",
+  "_target": "^2.2.0",
+  "_originalSource": "Collaborne/iron-justified-gallery",
+  "_direct": true
+}

@@ -1,0 +1,52 @@
+<html>
+	<head>
+		<script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+		<link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+		<link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+		<link rel="import" href="../../iron-icons/iron-icons.html">
+		<link rel="import" href="../iron-justified-gallery.html">
+	</head>
+
+	<body>
+		<demo-snippet>
+			<dom-bind>
+				<template>
+					<iron-justified-gallery images="[[images]]" on-tap-image="onTapImage">
+					</iron-justified-gallery>
+
+					<script>
+						var scope = document.querySelector('dom-bind');
+						scope.images = [
+							{
+								"width": 500,
+								"url": "https://static.pexels.com/photos/248159/pexels-photo-248159.jpeg",
+								"icon": "icons:file-download"
+							},
+							{
+								"width": 600,
+								"url": "https://static.pexels.com/photos/281024/pexels-photo-281024.jpeg"
+							},
+							{
+								"width": 1000,
+								"url": "https://static.pexels.com/photos/166571/pexels-photo-166571.jpeg"
+							},
+							{
+								"width": 400,
+								"url": "https://static.pexels.com/photos/199089/pexels-photo-199089.jpeg"
+							},
+							{
+								"width": 1000,
+								"url": "https://static.pexels.com/photos/244483/pexels-photo-244483.jpeg"
+							}
+						];
+
+						// Shows how to handle tap on an image
+						scope.onTapImage = function(e) {
+							alert('Image url: ' + e.detail.url);
+						};
+					</script>
+				</template>
+			</dom-bind>
+		</demo-snippet>
+	</body>
+</html>

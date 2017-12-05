@@ -539,7 +539,7 @@ See README.MD for more use examples, styling, api and a link to a live demo page
        * @param  {String} query Optional - Geocoder Request options
        * @return {Promise<Array>}         A promise for a place object or a status on failure
        */
-      searchPlaces: function (place, query, pagibutton, option) {
+      searchPlaces: function (place, query, pagibutton, order) {
         return new Promise(function (resolve, reject) {
           if (!this._placesearch) {
             reject('Search library not ready.');
@@ -552,22 +552,41 @@ See README.MD for more use examples, styling, api and a link to a live demo page
               opts.minPriceLevel = 0;
               opts.maxPriceLevel = 4;
             }
+            this.set('nearbyrestaurants',[]);
             this._placesearch.textSearch(opts, function (results, status, pagination) {
               if (status == google.maps.places.PlacesServiceStatus.OK) {
-                resolve(option);
+                //resolve(results);
                // console.log(option);
-                results.sort(function (x, y) {
-                  var n = x.price_level - y.price_level;
-                  if (n !== 0) {
-                    return n;
-                  }
-
-                  return y.rating - x.rating;
-                });
-
+   
                 results.forEach((element) => {
                   this.push('nearbyrestaurants', element);
                 })
+                var arr = this.nearbyrestaurants;
+                switch (order) {
+                  case 'High Rating with Low Price':
+                    arr.sort(function (x, y) {
+                      var n = x.price_level - y.price_level;
+                      if (n !== 0) {
+                        return n;
+                      }
+                      return y.rating - x.rating;
+                    });
+                    break;
+                    case 'Low Rating with Low Price':
+                   arr.sort(function (x, y) {
+                          var n = x.price_level - y.price_level;
+                          if (n !== 0) {
+                            return n;
+                          }
+        
+                          return x.rating - y.rating;
+                        });
+                  break;
+        
+                }
+                
+                this.nearbyrestaurants = arr.slice(0);
+
                 if (pagination.hasNextPage) {
                   pagibutton.onclick = () => {
                     //this.more = results;
@@ -587,35 +606,35 @@ See README.MD for more use examples, styling, api and a link to a live demo page
         }.bind(this));
       },
 
-      orderchanged: function (option) {
-        console.log(option);
-        var arr = this.nearbyrestaurants;
-        switch (option) {
-          case 'High Rating with Low Price':
-            arr.sort(function (x, y) {
-              var n = x.price_level - y.price_level;
-              if (n !== 0) {
-                return n;
-              }
+      // orderchanged: function (option) {
+      //   console.log(option);
+      //   var arr = this.nearbyrestaurants;
+      //   switch (option) {
+      //     case 'High Rating with Low Price':
+      //       arr.sort(function (x, y) {
+      //         var n = x.price_level - y.price_level;
+      //         if (n !== 0) {
+      //           return n;
+      //         }
 
-              return y.rating - x.rating;
-            });
-            break;
-          case 'High Rating with High Price':
-            arr.sort(function (x, y) {
-              var n = y.price_level - x.price_level;
-              if (n !== 0) {
-                return n;
-              }
+      //         return y.rating - x.rating;
+      //       });
+      //       break;
+      //     case 'High Rating with High Price':
+      //       arr.sort(function (x, y) {
+      //         var n = y.price_level - x.price_level;
+      //         if (n !== 0) {
+      //           return n;
+      //         }
 
-              return y.rating - x.rating;
-            });
-            break;
+      //         return y.rating - x.rating;
+      //       });
+      //       break;
 
-        }
-        this.nearbyrestaurants = arr;
+      //   }
+      //   this.nearbyrestaurants = arr;
 
-      },
+      // },
 
       getDetail: function (placeid) {
         return new Promise(function (resolve, reject) {
