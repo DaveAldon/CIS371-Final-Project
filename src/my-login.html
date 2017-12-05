@@ -25,13 +25,13 @@ Joseph
       }
 
     </style>
-    <firebase-app id="myFireApp" auth-domain="cheap-eats-72242.firebaseapp.com"
+<!--     <firebase-app id="myFireApp" auth-domain="cheap-eats-72242.firebaseapp.com"
       database-url="https://cheap-eats-72242.firebaseio.com"
       api-key="AIzaSyB_UNMUaAogW_KHDBniOQoE_GfitN36mgo">
     </firebase-app>
-    <firebase-auth id="auth" user="{{user}}" provider="google" on-error="handleError">
+ -->    <firebase-auth id="auth" user="{{user}}" provider="google" on-error="handleError">
     </firebase-auth>
-    <firebase-query id="query" path="/private-feed/[[user.uid]]"></firebase-query>
+    <firebase-query id="fireQry" path="/private-feed/[[user.uid]]"></firebase-query>
     <auth-login></auth-login>
   </template>
 
@@ -49,7 +49,7 @@ Joseph
       		observer: '_favchanged'
       	},
       	_favchanged: function(e){
-      	   var dbRef = this.$.myFireApp.app.database();
+      	    var dbRef = this.$.fireQry.app.database();
       	    dbRef.ref('favorite').push().set(e.target.restaurant);
         }
       }

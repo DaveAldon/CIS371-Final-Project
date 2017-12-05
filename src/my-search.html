@@ -34,8 +34,8 @@ Chit
 <link rel="import" href="../bower_components/salte-rating/salte-rating.html">
 
 <link rel="import" href="../bower_components/l2t-paper-slider/l2t-paper-slider.html">
-<link rel="import" href="../bower_components/iron-justified-gallery/iron-justified-gallery.html">
-<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<!-- <link rel="import" href="../bower_components/iron-justified-gallery/iron-justified-gallery.html">
+ --><link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu-light.html">
@@ -214,12 +214,12 @@ blockquote:after {
 }
   
     </style>
-    <firebase-app id="myFireApp" auth-domain="cheap-eats-72242.firebaseapp.com" database-url="https://cheap-eats-72242.firebaseio.com"
+<!--     <firebase-app id="myFireApp" auth-domain="cheap-eats-72242.firebaseapp.com" database-url="https://cheap-eats-72242.firebaseio.com"
       api-key="AIzaSyB_UNMUaAogW_KHDBniOQoE_GfitN36mgo">
-    </firebase-app>
+    </firebase-app> -->    
     <firebase-auth id="auth" user="{{user}}" provider="google" on-error="handleError">
     </firebase-auth>
-    <firebase-query path="/private-feed/[[user.uid]]" data="{{privateData}}"></firebase-query>
+    <firebase-query id="fireQry" path="/private-feed/[[user.uid]]" data="{{privateData}}"></firebase-query>
 
     <paper-input-place id='input' api-key="[[key]]" class="custom" value="{{val}}" place="{{place}}" nearbyrestaurants="{{res}}"
       label="Pick a place, any place" on-value-changed="wipeout" on-place-changed="changed" hide-error></paper-input-place>
@@ -478,7 +478,7 @@ blockquote:after {
 
       addfav(e) {
         var user = this.$.auth.user;
-        var dbRef = this.$.myFireApp.app.database();
+        var dbRef = this.$.fireQry.app.database();
         // console.log( this.$.auth.user.uid);
         if (user !== null) {
           var opt = {};
