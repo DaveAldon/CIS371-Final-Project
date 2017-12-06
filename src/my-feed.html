@@ -16,14 +16,10 @@ David
 
 <dom-module id="my-feed">
   <template>
-<!--     <firebase-app id="myFireApp" auth-domain="cheap-eats-72242.firebaseapp.com"
-      database-url="https://cheap-eats-72242.firebaseio.com"
-      api-key="AIzaSyB_UNMUaAogW_KHDBniOQoE_GfitN36mgo">
-    </firebase-app> -->
     <firebase-auth id="auth" user="{{user}}" provider="google" on-error="handleError">
     </firebase-auth>
     <firebase-query id="fireQry" path="/private-feed/[[user.uid]]" data="{{privateData}}"></firebase-query>
-    <firebase-query path="/public-feed" limit-to-last= "10" data="{{publicData}}"></firebase-query>
+    <firebase-query path="/public-feed" limit-to-last= "5" data="{{publicData}}"></firebase-query>
     <style include="shared-styles">
       :host {
         display: block;
