@@ -1,10 +1,10 @@
 # Cheap Eats
 
-[![Build Status](https://travis-ci.org/PolymerElements/polymer-starter-kit.svg?branch=master)](https://travis-ci.org/PolymerElements/polymer-starter-kit)
+Created by Chit, David, and Joseph 2017. Check it out below:
 
 https://davealdon.github.io/CIS371-Final-Project/
 
-##### Prerequisites
+##### Development Prerequisites
 
 First, install [Polymer CLI](https://github.com/Polymer/polymer-cli) using
 [npm](https://www.npmjs.com) (we assume you have pre-installed [node.js](https://nodejs.org)).
