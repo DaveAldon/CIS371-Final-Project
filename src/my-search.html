@@ -261,6 +261,10 @@ Chit
       <paper-alert-dialog-icon-header icon="icons:close">No Login Account!</paper-alert-dialog-icon-header>
       Please login first to add a favorite!
     </paper-alert-dialog>
+    <paper-alert-dialog id="success" confirm-button="Got it">
+      <paper-alert-dialog-icon-header icon="icons:favorite">Successfully Added!</paper-alert-dialog-icon-header>
+      [[item]] added to your favorite list!
+    </paper-alert-dialog>
   </template>
 
   <script>
@@ -370,11 +374,13 @@ Chit
         var dbRef = this.$.fireQry.app.database();
         try {
           var uid = user.uid;
-          var opt = {};
+            var opt = {};
           opt.name = e.target.restaurant.name;
           opt.address = e.target.restaurant.formatted_address;
           opt.placeid = e.target.restaurant.place_id;
           dbRef.ref('/private-feed/' + uid).push(opt);
+          this.item =  e.target.restaurant.name;
+          this.$.success.open();
         }
         catch(ex) {
           this.$.dialog.open();
