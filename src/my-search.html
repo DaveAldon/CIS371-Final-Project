@@ -250,7 +250,7 @@ Chit
         <l2t-paper-slider auto-progress slide-duration="2" total-slides=[[reviews.length]]>
           <template is="dom-repeat" items="[[reviews]]" as="review">
             <paper-slide class="text-center">
-             <paper-avatar src=[[review.profile_photo_url]]></paper-avatar>[[review.author_name]] <blockquote></br>[[review.text]]</blockquote>
+             <paper-avatar src=[[review.profile_photo_url]]></paper-avatar>[[review.author_name]] <blockquote>[[review.text]]</blockquote>
             </paper-slide>
           </template>
         </l2t-paper-slider>

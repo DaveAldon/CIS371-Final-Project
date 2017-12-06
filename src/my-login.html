@@ -15,7 +15,6 @@ Joseph
     <style include="shared-styles">
       :host {
         display: block;
-
         padding: 10px;
       }
        paper-button {
@@ -34,23 +33,23 @@ Joseph
   <script>
     class MyLogin extends Polymer.Element {
       static get is() { return 'my-login'; }
-    static get properties() {
-    	return {
-    		user: {
-    			type: Object
-    		},
-      	favorite: {
-      		type: Object,
-      		notify: true,
-      		observer: '_favchanged'
-      	},
-      	_favchanged: function(e){
+      static get properties() {
+    	  return {
+          user: {
+          	type: Object
+          },
+          favorite: {
+          	type: Object,
+          	notify: true,
+          	observer: '_favchanged'
+          },
+      	  _favchanged: function(e){
       	    var dbRef = this.$.fireQry.app.database();
       	    dbRef.ref('favorite').push().set(e.target.restaurant);
+          }
         }
-      }
-    };
-	}
+      };
+	  }
     window.customElements.define(MyLogin.is, MyLogin);
   </script>
 </dom-module>
